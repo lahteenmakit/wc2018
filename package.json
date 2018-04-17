@@ -18,7 +18,12 @@
   "homepage": "https://github.com/lahteenmakit/wc2018#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "bookshelf": "^0.13.3",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
-    "mysql2": "^1.5.3"
+    "knex": "^0.14.6",
+    "mysql2": "^1.5.3",
+    "nodemon": "^1.17.3",
+    "path": "^0.12.7"
   }
 }
