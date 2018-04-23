@@ -5,11 +5,32 @@ const cors = require('cors');
 
 const Match = require('./models/Match.js');
 const Team = require('./models/Team.js');
+const Participiant = require('./models/Participiant.js')
 
 const app = express();
 app.use(bodyParser.json());
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
+
+app.get('/participiants', (req, res, next) => {
+  Participiant.getAllParticipiants((err, rows) => {
+    if (err) {
+        res.json(err);
+    } else {
+        res.json(rows);
+    }
+  });
+});
+
+app.put('/addParticipiantPoints/:id?', (req, res, next) => {
+  Participiant.addParticipiantPoints(req.params.id, req.query.points, (err, rows) => {
+    if (err) {
+        res.json(err);
+    } else {
+        res.json(rows);
+    }
+  });
+});
 
 app.get('/teams', (req, res, next) => {
   Team.getAllTeams((err, rows) => {

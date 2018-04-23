@@ -1,12 +1,14 @@
 create table participiants (
-	email varchar(320),
+  id int not null auto_increment,
+  email varchar(320),
 	username varchar(50),
 	password varchar(44),
-	points int
+	points int,
+  primary key (id)
 );
 
 insert into participiants (email, username, password, points)
-values ('pekka@testi.com','pekka','salasana',0)
-values ('markku@testi.com','markku','salasana',0)
-values ('jussi@testi.com','jussi','salasana',0)
-values ('timo@testi.com','timo','salasana',0);
+values ('pekka@testi.com','pekka','salasana',0),
+ ('markku@testi.com','markku','salasana',0),
+ ('jussi@testi.com','jussi','salasana',0),
+ ('timo@testi.com','timo','salasana',0);
