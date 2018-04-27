@@ -1,1 +1,3 @@
-require('./module1.js');
+//require('./module1.js');
+const io = require('socket.io-client');
+const socket = io.connect('/');
