@@ -1,6 +1,8 @@
 var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
 
+//frontend folder fucked up the webpack build
+
 module.exports = {
   context: __dirname,
   devtool: debug ? "inline-sourcemap" : null,
