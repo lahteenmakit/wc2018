@@ -3,13 +3,13 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-//const Match = require('./models/Match.js');
+const Match = require('./models/Match.js');
 //const Team = require('./models/Team.js');
 //const Participiant = require('./models/Participiant.js')
 
 const app = express();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+//var io = require('socket.io')(server);
 
 app.use(bodyParser.json());
 app.use(express.static('frontend'));
@@ -100,7 +100,7 @@ app.get('/teamStats/:id?', (req, res, next) => {
       res.json(teamStats);
     }
   });
-});
+});*/
 
 app.get('/matches/:id?', (req, res, next) => {
     if(req.params.id) {
@@ -131,4 +131,4 @@ app.put('/addResult/:id?', (req, res, next) => {
         res.json(rows);
     }
   });
-});*/
+});

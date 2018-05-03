@@ -8,7 +8,7 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : null,
   entry: "./frontend/src/scripts.js",
   output: {
-    path: __dirname + "frontend/src/",
+    path: __dirname + "/frontend/src/",
     filename: "scripts.min.js"
   },
   plugins: debug ? [] : [
