@@ -3,16 +3,24 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const Match = require('./models/Match.js');
-const Team = require('./models/Team.js');
-const Participiant = require('./models/Participiant.js')
+//const Match = require('./models/Match.js');
+//const Team = require('./models/Team.js');
+//const Participiant = require('./models/Participiant.js')
 
 const app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
 app.use(bodyParser.json());
+app.use(express.static('frontend'));
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/frontend/index.html');
+});
 
-app.get('/participiants', (req, res, next) => {
+server.listen(3000, () => console.log('Example app listening on port 3000!'));
+
+/*app.get('/participiants', (req, res, next) => {
   Participiant.getAllParticipiants((err, rows) => {
     if (err) {
         res.json(err);
@@ -123,4 +131,4 @@ app.put('/addResult/:id?', (req, res, next) => {
         res.json(rows);
     }
   });
-});
+});*/
