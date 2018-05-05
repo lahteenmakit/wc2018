@@ -6,20 +6,38 @@ const apiUrl = 'http://localhost:3000/matches';
 
 
 $(document).ready(() => {
-  console.log(moment().format('YYYY-MM-DD'));
   $.get(apiUrl, (data, status) => {
-    $('#matchesTable').append('<tbody>')
+    var dateAsTableHeader = '';
     $.each(data, (index, value) => {
-      
+      var date = moment(value.date, 'DD/MM/YYYY HH:mm').format('dddd D MMMM');
+      if(date != dateAsTableHeader) {
+        dateAsTableHeader = date;
+        $('#matchesTableDiv').append("<table id='newDateTableHeader' class='ui single line table'>" +
+                                     "<thead><tr>" +
+                                            "<th>" + dateAsTableHeader + "</th>" +
+                                            "<th></th>" +
+                                            "<th></th>" +
+                                            "<th></th>" +
+                                     "</tr></thead>" +
+                                        "<tbody>" +
+                                          "<tr><td>" + value.date         + "<br>" +
+                                                       value.groupNumber  + "<br>" +
+                                                       value.location     + "</td>" +
+                                              "<td>" + value.homeTeam     + "</td>" +
+                                              "<td>" + value.awayTeam     + "</td>" +
+                                              "<td>" + value.result       + "</td></tr>" +
+                                        "</tbody>" +
+                                     "</table>");
+      }
 
-      $('#matchesTable').append('<tr><td>' + value.date + '<br>' +
+
+      /*$('#matchesTable').append('<tr><td>' + value.date + '<br>' +
                                              value.groupNumber + '<br>' +
                                              value.location + '</td>' +
                                     '<td>' + value.homeTeam + '</td>' +
                                     '<td>' + value.awayTeam + '</td>' +
-                                    '<td>' + value.result + '</td></tr>');
+                                    '<td>' + value.result + '</td></tr>');*/
     });
-    $('#matchesTable').append('</tbody>')
   });
 });
 
