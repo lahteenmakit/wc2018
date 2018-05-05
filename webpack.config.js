@@ -12,6 +12,11 @@ module.exports = {
     filename: "scripts.min.js"
   },
   plugins: debug ? [] : [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      moment: 'moment'
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),

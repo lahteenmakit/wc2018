@@ -1,6 +1,30 @@
-var apiUrl = 'http://localhost:3000/matches';
+const jquery = require('jquery');
+const moment = require('moment');
 
-var request = new XMLHttpRequest();
+
+const apiUrl = 'http://localhost:3000/matches';
+
+
+$(document).ready(() => {
+  console.log(moment().format('YYYY-MM-DD'));
+  $.get(apiUrl, (data, status) => {
+    $('#matchesTable').append('<tbody>')
+    $.each(data, (index, value) => {
+      
+
+      $('#matchesTable').append('<tr><td>' + value.date + '<br>' +
+                                             value.groupNumber + '<br>' +
+                                             value.location + '</td>' +
+                                    '<td>' + value.homeTeam + '</td>' +
+                                    '<td>' + value.awayTeam + '</td>' +
+                                    '<td>' + value.result + '</td></tr>');
+    });
+    $('#matchesTable').append('</tbody>')
+  });
+});
+
+
+/*var request = new XMLHttpRequest();
 
 request.open('GET', apiUrl, true);
 
@@ -11,4 +35,4 @@ request.onload = function () {
   });
 }
 
-request.send();
+request.send();*/
