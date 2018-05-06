@@ -8,49 +8,49 @@ const apiUrl = 'http://localhost:3000/matches';
 $(document).ready(() => {
   $.get(apiUrl, (data, status) => {
     var dateAsTableHeader = '';
-    $.each(data, (index, value) => {
-      var date = moment(value.date, 'DD/MM/YYYY HH:mm').format('dddd D MMMM');
+    $.each(data, (index, match) => {
+      var date = moment(match.date, 'DD/MM/YYYY HH:mm').format('dddd D MMMM');
       if(date != dateAsTableHeader) {
         dateAsTableHeader = date;
-        $('#matchesTableDiv').append("<table id='newDateTableHeader' class='ui single line table'>" +
+        $('#matchesTableDiv').append("<table class='ui single line table'>" +
                                      "<thead><tr>" +
                                             "<th>" + dateAsTableHeader + "</th>" +
                                             "<th></th>" +
                                             "<th></th>" +
                                             "<th></th>" +
                                      "</tr></thead>" +
-                                        "<tbody>" +
-                                          "<tr><td>" + value.date         + "<br>" +
-                                                       value.groupNumber  + "<br>" +
-                                                       value.location     + "</td>" +
-                                              "<td>" + value.homeTeam     + "</td>" +
-                                              "<td>" + value.awayTeam     + "</td>" +
-                                              "<td>" + value.result       + "</td></tr>" +
+                                        "<tbody id=" + dateAsTableHeader.replace(/ /g, '-') + ">" +
+                                          "<tr><td>" + match.date         + "<br>" +
+                                                       match.groupNumber  + "<br>" +
+                                                       match.location     + "</td>" +
+                                              "<td align='left'>" + match.homeTeam     + "</td>" +
+                                              "<td align='left'>" + match.awayTeam     + "</td>" +
+                                              "<td>" +
+                                                "<div id=divMatchId-" + match.matchId + "-homeGoals" + " class='ui input focus'> " +
+                                                    "<input type='number' min='0' placeholder='Home Goals'>" +
+                                                "</div>" + " - " +
+                                                "<div id=divMatchId-" + match.matchId + "-awayGoals" + " class='ui input focus'> " +
+                                                    "<input type='number' min='0' placeholder='Away Goals'>" +
+                                                "</div>" +
+                                              "</td></tr>" +
                                         "</tbody>" +
                                      "</table>");
       }
-
-
-      /*$('#matchesTable').append('<tr><td>' + value.date + '<br>' +
-                                             value.groupNumber + '<br>' +
-                                             value.location + '</td>' +
-                                    '<td>' + value.homeTeam + '</td>' +
-                                    '<td>' + value.awayTeam + '</td>' +
-                                    '<td>' + value.result + '</td></tr>');*/
+      else {
+        $('#' + dateAsTableHeader.replace(/ /g, '-')).append("<tr><td>" + match.date         + "<br>" +
+                                                       match.groupNumber  + "<br>" +
+                                                       match.location     + "</td>" +
+                                               "<td align='left'>" + match.homeTeam     + "</td>" +
+                                               "<td align='left'>" + match.awayTeam     + "</td>" +
+                                               "<td>" +
+                                                 "<div id=divMatchId-" + match.matchId + "-homeGoals" + " class='ui input focus'> " +
+                                                     "<input type='number' min='0' placeholder='Home Goals'>" +
+                                                 "</div>" + " - " +
+                                                 "<div id=divMatchId-" + match.matchId + "-awayGoals" + " class='ui input focus'> " +
+                                                     "<input type='number' min='0' placeholder='Away Goals'>" +
+                                                 "</div>" +
+                                               "</td></tr>");
+      }
     });
   });
 });
-
-
-/*var request = new XMLHttpRequest();
-
-request.open('GET', apiUrl, true);
-
-request.onload = function () {
-  var data = JSON.parse(this.response);
-  data.forEach((match) => {
-    console.log(match.location);
-  });
-}
-
-request.send();*/
