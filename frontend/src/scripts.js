@@ -1,11 +1,11 @@
 const jquery = require('jquery');
 const moment = require('moment');
 
-
 const apiUrl = 'http://localhost:3000/matches';
 
+$(document).ready(displayMatchesTable());
 
-$(document).ready(() => {
+function displayMatchesTable() {
   $.get(apiUrl, (data, status) => {
     var dateAsTableHeader = '';
     $.each(data, (index, match) => {
@@ -53,4 +53,4 @@ $(document).ready(() => {
       }
     });
   });
-});
+}
