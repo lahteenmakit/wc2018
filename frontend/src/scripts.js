@@ -1,9 +1,58 @@
 const jquery = require('jquery');
 const moment = require('moment');
+const standings = require('./finalStandings');
 
 const apiUrl = 'http://localhost:3000/matches';
 
-$(document).ready(displayMatchesTable());
+$(document).ready(function() {
+  $(':button#matchesResultSubmitButton').click(function() {
+    if(getUserInputForMatchResults())
+      window.location.replace('/standings');
+  });
+  displayMatchesTable();
+  displayTeams();
+});
+
+function displayTeams() {
+  const teamsApi = 'http://localhost:3000/teams';
+  $.get(teamsApi, (data, status) => {
+    var htmlDataList = "<select class='ui dropdown'>"
+    htmlDataList += "<option value=''>-</option>"
+    data.sort((a,b) => {
+      if (a.homeTeam < b.homeTeam)
+        return -1;
+      if (a.homeTeam > b.homeTeam)
+        return 1;
+      return 0;
+    });
+    data.forEach((element) => {
+      htmlDataList += "<option value='" + element.homeTeam + "'>" + element.homeTeam + "</option>"
+    });
+    htmlDataList += "</select>"
+    $('#championDiv').append(htmlDataList);
+    $('#runnerupDiv').append(htmlDataList);
+    $('#3rdplaceDiv').append(htmlDataList);
+  });
+}
+
+function getUserInputForMatchResults() {
+  var results = [];
+  for(var i=1; i<49; i++) {
+    var matchResult = {};
+    matchResult['matchId'] = i;
+    matchResult['homeGoals'] = $('#divMatchId-' + i + '-homeGoals' + ' :input').val();
+    matchResult['awayGoals'] = $('#divMatchId-' + i + '-awayGoals' + ' :input').val();
+
+    if(matchResult['homeGoals'] == '' || matchResult['awayGoals'] == '') {
+      alert('Missing scores in one or more matches! Fill in the blanks and click submit again.');
+      return null;
+    }
+
+    results.push(matchResult);
+  }
+  
+  return 1;
+}
 
 function displayMatchesTable() {
   $.get(apiUrl, (data, status) => {

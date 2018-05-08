@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WC2018 - Top scorers</title>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous">
+    </script>
+    <script src="semantic/dist/semantic.min.js"></script>
+  </head>
+
+  <body>
+    <script src="src/finalStandings.js"></script>
+    <div id="scorersTableDiv" style="margin-top:100px;margin-bottom:50px;margin-left:20%;margin-right:20%;">
+      <h1>Top scorers of the Fifa World cup 2018</h1>
+      <p>Guess the TOP 3 scoring players of the tournament.</p>
+      <p>Points: <br>
+        Both player AND number of goals correct <b>10 points</b><br>
+        Player correct but goals incorrect: <b>3 points</b><br>
+      </p>
+      <table class="ui single line table">
+        <tbody>
+          <tr>
+            <td>Top Scorer</td>
+            <td>
+              <div class='ui input focus'>
+                <input type='text' placeholder='Player name'>
+              </div>
+              <div class='ui input focus'>
+                  <input type='number' min='0' placeholder='Goals'>
+              </div>
+          </td>
+          </tr>
+          <tr>
+            <td>Runner-up</td>
+            <td>
+              <div class='ui input focus'>
+                <input type='text' placeholder='Player name'>
+              </div>
+              <div class='ui input focus'>
+                  <input type='number' min='0' placeholder='Goals'>
+              </div>
+          </td>
+          </tr>
+          <tr>
+            <td>3rd place</td>
+            <td>
+              <div class='ui input focus'>
+                <input type='text' placeholder='Player name'>
+              </div>
+              <div class='ui input focus'>
+                  <input type='number' min='0' placeholder='Goals'>
+              </div>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="submitButtonAfterScorersTable" align="center" style="margin-bottom:50px;">
+      <button id='scorersSubmitButton' class='massive ui button' style="background-color:#2a8262;color:white"> Submit Top Scorers </button>
+    </div>
+  </body>
+</html>

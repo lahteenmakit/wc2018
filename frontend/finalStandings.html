@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WC2018 - Final Standings</title>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous">
+    </script>
+    <script src="semantic/dist/semantic.min.js"></script>
+  </head>
+
+  <body>
+    <script src="src/scripts.min.js"></script>
+    <div id="standingsTableDiv" style="margin-top:100px;margin-bottom:50px;margin-left:20%;margin-right:20%;">
+      <h1>Final standings of the Fifa World cup 2018</h1>
+      <p>Guess the TOP 3 teams of the tournament.</p>
+      <p>Points: <br>
+        Both team AND place correct: <b>5 points</b><br>
+        Team correct but place incorrect: <b>2 points</b><br>
+      </p>
+      <table class="ui single line table">
+        <tbody>
+          <tr>
+            <td>Champion</td>
+            <td><div id='championDiv' class='ui input focus'>
+            </div></td>
+          </tr>
+          <tr>
+            <td>Runner-up</td>
+            <td><div id='runnerupDiv' class='ui input focus'>
+            </div></td>
+          </tr>
+          <tr>
+            <td>3rd place</td>
+            <td><div id='3rdplaceDiv' class='ui input focus'>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="submitButtonAfterStandingsTable" align="center" style="margin-bottom:50px;">
+      <button id='standingsSubmitButton' class='massive ui button' style="background-color:#2a8262;color:white"> Submit Final Standings </button>
+    </div>
+  </body>
+</html>

@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const Match = require('./models/Match.js');
-//const Team = require('./models/Team.js');
+const Team = require('./models/Team.js');
 //const Participiant = require('./models/Participiant.js')
 
 const app = express();
@@ -16,6 +16,18 @@ app.use(express.static('frontend'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/frontend/index.html');
+});
+
+app.get('/standings', (req, res) => {
+  res.sendFile(__dirname + '/frontend/finalStandings.html');
+});
+
+app.get('/scorers', (req, res) => {
+  res.sendFile(__dirname + '/frontend/scorers.html');
+});
+
+app.get('/extras', (req, res) => {
+  res.sendFile(__dirname + '/frontend/extras.html');
 });
 
 server.listen(3000, () => console.log('Example app listening on port 3000!'));
@@ -38,7 +50,7 @@ app.put('/addParticipiantPoints/:id?', (req, res, next) => {
         res.json(rows);
     }
   });
-});
+});*/
 
 app.get('/teams', (req, res, next) => {
   Team.getAllTeams((err, rows) => {
@@ -50,7 +62,7 @@ app.get('/teams', (req, res, next) => {
   });
 });
 
-app.get('/teamStats/:id?', (req, res, next) => {
+/*app.get('/teamStats/:id?', (req, res, next) => {
   Team.getTeamStats(req.params.id, (err, rows) => {
     if (err) {
         res.json(err);
@@ -123,7 +135,6 @@ app.get('/matches/:id?', (req, res, next) => {
 });
 
 app.put('/addResult/:id?', (req, res, next) => {
-  console.log(req.query.homeGoals)
   Match.setMatchResult(req.params.id, req.query.homeGoals, req.query.awayGoals, (err, rows) => {
     if (err) {
         res.json(err);
