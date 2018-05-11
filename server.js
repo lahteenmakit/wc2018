@@ -2,20 +2,34 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const serssion = require('express-session');
 
 const Match = require('./models/Match.js');
 const Team = require('./models/Team.js');
 //const Participiant = require('./models/Participiant.js')
 
 const app = express();
+/*app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {expires:false}
+}));*/
 var server = require('http').Server(app);
-//var io = require('socket.io')(server);
 
 app.use(bodyParser.json());
 app.use(express.static('frontend'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/frontend/index.html');
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/frontend/login.html');
+});
+
+app.post('/register', (req, res) => {
+  res.sendFile(__dirname + '/frontend/registrationComplete.html');
 });
 
 app.get('/standings', (req, res) => {
