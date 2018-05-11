@@ -4,23 +4,74 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const serssion = require('express-session');
 
+require('dotenv').config();
+
 const Match = require('./models/Match.js');
 const Team = require('./models/Team.js');
-//const Participiant = require('./models/Participiant.js')
+
+
+console.log(process.env.DB_USER);
+
+const exphbs  = require('express-handlebars');
+const hbs = require('handlebars');
+const fs = require('fs');
+
+const index = require('./routes/index.js');
 
 const app = express();
+
+app.set('views', path.join(__dirname, 'views'));
+app.engine('.hbs', exphbs({extname: '.hbs'}));
+app.set('view engine', '.hbs');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use('/', index);
+
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+
+
+
+
+const partialsDir = __dirname + '/views/partials';
+
+const filenames = fs.readdirSync(partialsDir);
+
+filenames.forEach(function (filename) {
+  const matches = /^([^.]+).hbs$/.exec(filename);
+  if (!matches) {
+    return;
+  }
+  const name = matches[1];
+  const template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
+  hbs.registerPartial(name, template);
+});
+
+hbs.registerHelper('json', function(context) {
+    return JSON.stringify(context, null, 2);
+});
+
+
 /*app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
   cookie: {expires:false}
 }));*/
-var server = require('http').Server(app);
+//var server = require('http').Server(app);
 
-app.use(bodyParser.json());
-app.use(express.static('frontend'));
 
-app.get('/', (req, res) => {
+//app.use(express.static('frontend'));
+
+
+
+/*app.get('/', (req, res) => {
   res.sendFile(__dirname + '/frontend/index.html');
 });
 
@@ -42,9 +93,9 @@ app.get('/scorers', (req, res) => {
 
 app.get('/extras', (req, res) => {
   res.sendFile(__dirname + '/frontend/extras.html');
-});
+});*/
 
-server.listen(3000, () => console.log('Example app listening on port 3000!'));
+//server.listen(3000, () => console.log('Example app listening on port 3000!'));
 
 /*app.get('/participiants', (req, res, next) => {
   Participiant.getAllParticipiants((err, rows) => {
@@ -66,7 +117,7 @@ app.put('/addParticipiantPoints/:id?', (req, res, next) => {
   });
 });*/
 
-app.get('/teams', (req, res, next) => {
+/*app.get('/teams', (req, res, next) => {
   Team.getAllTeams((err, rows) => {
     if (err) {
         res.json(err);
@@ -74,7 +125,7 @@ app.get('/teams', (req, res, next) => {
         res.json(rows);
     }
   });
-});
+});*/
 
 /*app.get('/teamStats/:id?', (req, res, next) => {
   Team.getTeamStats(req.params.id, (err, rows) => {
@@ -128,7 +179,7 @@ app.get('/teams', (req, res, next) => {
   });
 });*/
 
-app.get('/matches/:id?', (req, res, next) => {
+/*app.get('/matches/:id?', (req, res, next) => {
     if(req.params.id) {
       Match.getMatchById(req.params.id, (err, rows) => {
         if (err) {
@@ -171,4 +222,6 @@ app.put('/addResult/:id?', (req, res, next) => {
     });
     error != '' ? res.json(error) : res.json(success);
   }
-});
+});*/
+
+module.exports = app;
