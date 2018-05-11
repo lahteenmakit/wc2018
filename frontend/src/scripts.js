@@ -6,8 +6,9 @@ const apiUrl = 'http://localhost:3000/matches';
 
 $(document).ready(function() {
   $(':button#matchesResultSubmitButton').click(function() {
-    if(getUserInputForMatchResults())
-      window.location.replace('/standings');
+    getUserInputForMatchResults()
+    //if(getUserInputForMatchResults())
+      //window.location.replace('/standings');
   });
   displayMatchesTable();
   displayTeams();
@@ -36,6 +37,7 @@ function displayTeams() {
 }
 
 function getUserInputForMatchResults() {
+  console.log('hello')
   var results = [];
   for(var i=1; i<49; i++) {
     var matchResult = {};
@@ -43,14 +45,19 @@ function getUserInputForMatchResults() {
     matchResult['homeGoals'] = $('#divMatchId-' + i + '-homeGoals' + ' :input').val();
     matchResult['awayGoals'] = $('#divMatchId-' + i + '-awayGoals' + ' :input').val();
 
-    if(matchResult['homeGoals'] == '' || matchResult['awayGoals'] == '') {
+    /*if(matchResult['homeGoals'] == '' || matchResult['awayGoals'] == '') {
       alert('Missing scores in one or more matches! Fill in the blanks and click submit again.');
       return null;
-    }
-
+    }*/
     results.push(matchResult);
   }
-  
+  const addResultsApi = 'http://localhost:3000/addResult';
+  $.ajax({
+    type: 'PUT',
+    url: addResultsApi,
+    data: JSON.stringify(results),
+    contentType: 'application/json'
+  });
   return 1;
 }
 

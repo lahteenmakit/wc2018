@@ -135,11 +135,26 @@ app.get('/matches/:id?', (req, res, next) => {
 });
 
 app.put('/addResult/:id?', (req, res, next) => {
-  Match.setMatchResult(req.params.id, req.query.homeGoals, req.query.awayGoals, (err, rows) => {
-    if (err) {
-        res.json(err);
-    } else {
-        res.json(rows);
-    }
-  });
+  if(req.params.id) {
+    Match.setMatchResult(req.params.id, req.query.homeGoals, req.query.awayGoals, (err, rows) => {
+      if (err) {
+          res.json(err);
+      } else {
+          res.json(rows);
+      }
+    });
+  } else {
+    var success = '';
+    var error = '';
+    req.body.forEach((element) => {
+      Match.setMatchResult(element.matchId, element.homeGoals, element.awayGoals, (err, rows) => {
+        if (err) {
+            error += err;
+        } else {
+            success += rows;
+        }
+      });
+    });
+    error != '' ? res.json(error) : res.json(success);
+  }
 });
