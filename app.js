@@ -2,15 +2,14 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const serssion = require('express-session');
+const session = require('express-session');
+const expressValidator = require('express-validator');
+const passport = require('passport');
 
 require('dotenv').config();
 
 const Match = require('./models/Match.js');
 const Team = require('./models/Team.js');
-
-
-console.log(process.env.DB_USER);
 
 const exphbs  = require('express-handlebars');
 const hbs = require('handlebars');
@@ -26,6 +25,16 @@ app.set('view engine', '.hbs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressValidator());
+
+app.use(session({
+  secret: 'ioasndaisdnamdlaksmdaskmdaslkmd',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: true } if https then uncomment
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 

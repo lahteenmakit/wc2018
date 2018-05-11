@@ -2,6 +2,14 @@
 
 <h1>{{title}}</h1>
 
+{{#if errors}}
+  {{#each errors}}
+    <div class="alert alert-danger container">
+      {{this.msg}}
+    </div>
+  {{/each}}
+{{/if}}
+
 <div id="loginContainer" class="container">
   <form method="POST" action="/register">
     <div class="form-group">
