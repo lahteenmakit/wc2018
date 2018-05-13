@@ -9,6 +9,8 @@ const db = require('../dbconnection');
 
 const User = require('../models/User.js');
 const Match = require('../models/Match.js');
+const Team = require('../models/Team.js');
+const QuestionAnswer = require('../models/QuestionAnswer.js');
 
 router.get('/', (req, res, next) => {
   req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
@@ -60,13 +62,29 @@ router.post('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
 });
 
 router.get('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
-  //teams from database
-  res.render('quiz-standings');
+  Team.getAllTeams( (err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.render('quiz-standings', {
+        teams: rows
+      });
+    }
+  });
 });
 
+//Pitää miettiä set ja update erikseen
 router.post('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
-  //teams from database
-  res.redirect('/quiz/scorers');
+  var answers = req.body;
+  var success = '', error = '';
+  QuestionAnswer.setStadingsAnswersByUser(req.user.user_id, answers.champion, answers.runnerUp, answers.thirdPlace, (err, rows) => {
+    if (err) {
+        error += err;
+    } else {
+        success += rows;
+    }
+  });
+  error != '' ? res.json(error) : res.redirect('/quiz/scorers');
 });
 
 router.get('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {

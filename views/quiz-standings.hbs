@@ -12,26 +12,39 @@
   </p>
   <div id="matchesForm" class="container">
     <form method="POST" action="/quiz/standings">
-      <table class="table table-striped">
-        <tbody>
-          {{#each matches}}
-            <tr>
-              <td>{{this.date}} <br>
-                  {{this.groupNumber}} <br>
-                  {{this.location}} <br>
-              </td>
-              <td>{{this.homeTeam}}
-                  <input class="form-control" name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals" required>
-              </td>
-              <td>{{this.awayTeam}}
-                  <input class="form-control" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals" required>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
+      <table class="table">
+        <tr>
+          <td>Champion</td>
+          <td>
+            <select name="champion" class="selectpicker">
+              {{#each teams}}
+                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Runner-up</td>
+          <td>
+            <select name="runnerUp" class="selectpicker">
+              {{#each teams}}
+                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>3rd place</td>
+          <td>
+            <select name="thirdPlace" class="selectpicker">
+              {{#each teams}}
+                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
       </table>
-      <button type="submit" class="btn btn-primary">Submit match results</button>
+      <button type="submit" class="btn btn-primary">Submit your answers</button>
     </form>
-
   </div>
 </div>
