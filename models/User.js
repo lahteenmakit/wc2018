@@ -6,6 +6,9 @@ const User = {
   },
   getAllUsers: (callback) => {
     return db.query('select * from users', callback);
+  },
+  getUsernameById: (id, callback) => {
+    return db.query('select username from users where user_id=?', [id], callback);
   }
 };
 

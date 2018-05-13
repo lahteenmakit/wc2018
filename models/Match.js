@@ -7,9 +7,9 @@ const Match = {
   getMatchById: (id, callback) => {
     return db.query('select * from matches where matchId=?', [id], callback);
   },
-  setMatchResult: (id, homeGoals, awayGoals, callback) => {
+  setMatchResult: (id, userId, homeGoals, awayGoals, callback) => {
     var result = homeGoals + '-' + awayGoals;
-    return db.query('UPDATE MATCHES SET homeGoals=?,awayGoals=?,result=?,matchEnded=1 WHERE matchId=?;', [homeGoals, awayGoals, result, id], callback);
+    return db.query('UPDATE MATCHES SET homeGoals=?,awayGoals=?,result=?,userId=?,matchEnded=1 WHERE matchId=?;', [homeGoals, awayGoals, result, id, userId], callback);
   }
 };
 

@@ -8,15 +8,112 @@ const saltRounds = 10;
 const db = require('../dbconnection');
 
 const User = require('../models/User.js');
+const Match = require('../models/Match.js');
 
 router.get('/', (req, res, next) => {
-  console.log(req.user);
-  console.log(req.isAuthenticated());
+  req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
   res.render('home', {title: 'Home'});
+});
+
+//Quiz stuff. Write a function. quizDoneAlreadyYesOrNo(). don't show quiz if done already for user.
+router.get('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
+  Match.getAllMatches( (err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.render('quiz-matches', {
+        matches: rows
+      });
+    }
+  });
+});
+
+router.post('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
+  var answers = req.body;
+  var success = '', error = '';
+  for(var i in answers) {
+    if(i.includes('homeGoals')) {
+      var match = {};
+      match['matchId'] = i.split('-')[0];
+      /*match['userId'] = User.getUsernameById(req.user, (err, rows) => {
+        if (err) {
+            error += err;
+        } else {
+            success += rows;
+        }
+      });*/
+      match['userId'] = 'test';
+      match['homeGoals'] = answers[i];
+    } else {
+      match['awayGoals'] = answers[i];
+      Match.setMatchResult(match.matchId, match.userId, match.homeGoals, match.awayGoals, (err, rows) => {
+        if (err) {
+            error += err;
+        } else {
+            success += rows;
+        }
+      });
+    }
+    console.log(match);
+  }
+  error != '' ? res.json(error) : res.redirect('/quiz/standings');
+});
+
+router.get('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
+  //teams from database
+  res.render('quiz-standings');
+});
+
+router.post('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
+  //teams from database
+  res.redirect('/quiz/scorers');
+});
+
+router.get('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
+  res.render('quiz-scorers');
+});
+
+router.post('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
+  res.redirect('/quiz/extras');
+});
+
+router.get('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
+  res.render('quiz-extras');
+});
+
+router.post('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
+  res.redirect('/quiz/done');
+});
+
+router.get('/quiz/done', authenticationMiddleware(), (req, res, next) => {
+  res.render('quiz-done');
 });
 
 router.get('/register', (req, res, next) => {
   res.render('register', {title: 'Registration'});
+});
+
+router.get('/profile', authenticationMiddleware(), (req, res, next) => {
+  res.render('profile', {title: 'Profile'});
+});
+
+router.get('/login', (req, res, next) => {
+  res.render('login', {title: 'Login'});
+});
+
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/home',
+  failureRedirect: '/login',
+  failureFlash: true
+})
+);
+
+router.get('/logout', (req, res, next) => {
+  req.logout();
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
 });
 
 router.post('/register', (req, res, next) => {
@@ -38,11 +135,13 @@ router.post('/register', (req, res, next) => {
   } else {
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       User.addUser(req.body.username, req.body.email, hash, (err, results, fields) => {
-        if(err)
-          throw err;
+        if(err) throw err;
         else {
           db.query('select last_insert_id() as user_id', (error, results, fields) => {
-            if(error) throw error;
+            if(error) {
+              console.log('Error while querying database');
+              throw error;
+            }
 
             const user_id = results[0];
 
@@ -64,5 +163,13 @@ passport.serializeUser(function(user_id, done) {
 passport.deserializeUser(function(user_id, done) {
   done(null, user_id);
 });
+
+function authenticationMiddleware() {
+	return (req, res, next) => {
+	  if (req.isAuthenticated())
+      return next();
+	  res.redirect('/login')
+	}
+}
 
 module.exports = router;
