@@ -11,17 +11,12 @@
     <form method="POST" action="/quiz/extras">
       <table class="table table-striped">
         <tbody>
-          {{#each matches}}
+          {{#each questions}}
             <tr>
-              <td>{{this.date}} <br>
-                  {{this.groupNumber}} <br>
-                  {{this.location}} <br>
+              <td>{{this}}
               </td>
-              <td>{{this.homeTeam}}
-                  <input class="form-control" name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals" required>
-              </td>
-              <td>{{this.awayTeam}}
-                  <input class="form-control" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals" required>
+              <td>
+                <input class="form-control" name="as" type='text' placeholder="Answer" required>
               </td>
             </tr>
           {{/each}}

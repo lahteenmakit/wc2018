@@ -1,14 +1,15 @@
 const db = require('../dbconnection');
+const Queries = require('./Queries.js');
 
 const User = {
   addUser: (username, email, password, callback) => {
-    return db.query('insert into users(username, email, password) values (?, ?, ?)', [username, email, password], callback);
+    return db.query(Queries.addUser, [username, email, password], callback);
   },
   getAllUsers: (callback) => {
-    return db.query('select * from users', callback);
+    return db.query(Queries.getAllUsers, callback);
   },
   getUsernameById: (id, callback) => {
-    return db.query('select username from users where user_id=?', [id], callback);
+    return db.query(Queries.getUsernameById, [id], callback);
   }
 };
 

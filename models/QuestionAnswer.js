@@ -1,38 +1,35 @@
 const db = require('../dbconnection');
+const Queries = require('./Queries.js');
 
 const QuestionAnswer = {
-  getStadingsAnswersByUser: (userId, callback) => {
-    return db.query('select answer_champion,answer_runnerup,answer_thirdplace from questionsAndAnswers where user_id=?;', [userId], callback)
+  insertQuestionsForUsers: (userId, callback) => {
+    var questionsArray = [
+      [userId, 'standings_champion', 'Champion', 'multipleChoice', ''],
+      [userId, 'standings_runnerUp', 'Runner-up', 'multipleChoice', ''],
+      [userId, 'standings_thirdPlace', '3rd place', 'multipleChoice', ''],
+      [userId, 'scorers_topScorer', 'Top Scorer', 'multipleChoice', ''],
+      [userId, 'extras_questions1', 'Extra Question 1', '', ''],
+      [userId, 'extras_questions2', 'Extra Question 2', '', ''],
+      [userId, 'extras_questions3', 'Extra Question 3', '', ''],
+      [userId, 'extras_questions4', 'Extra Question 4', '', ''],
+      [userId, 'extras_questions5', 'Extra Question 5', '', '']
+    ];
+    return db.query(Queries.insertQuestionsForUsers, [questionsArray], callback)
   },
-  getTopScorerAnswersByUser: (userId, callback) => {
-    return db.query('select answer_topScorer from questionsAndAnswers where user_id=?;', [userId], callback)
+  getAnswersByUser: (userId, callback) => {
+    return db.query(Queries.getAnswersByUser, [userId], callback)
   },
-  getExtraQuestionsAnswersByUser: (userId, callback) => {
-    return db.query('select extra1_answer,extra2_answer,extra3_answer,extra4_answer,extra5_answer from questionsAndAnswers where user_id=?;', [userId], callback)
+  getAllQuestions: (callback) => {
+    return db.query(Queries.getAllQuestions, callback)
   },
-  getAllExtraQuestions: (callback) => {
-    return db.query('select extra1_question,extra2_question,extra3_question,extra4_question,extra5_question from questionsAndAnswers;', callback)
+  getExtraQuestions: (callback) => {
+    return db.query(Queries.getExtraQuestions, callback)
   },
-  setStadingsAnswersByUser: (userId, answer1, answer2, answer3, callback) => {
-    return db.query('insert into questionsAndAnswers (answer_champion,answer_runnerup,answer_thirdplace,user_id) values (?,?,?,?);', [answer1, answer2, answer3, userId], callback)
-  },
-  setTopScorerAnswersByUser: (userId, answer, callback) => {
-    return db.query('insert into questionsAndAnswers (answer_topScorer,user_id) values(?,?);', [answer, userId], callback)
-  },
-  setExtraQuestionAnswersByUser: (userId, answer1, answer2, answer3, answer4, answer5, callback) => {
-    return db.query('insert into questionsAndAnswers (extra1_answer,extra2_answer,extra3_answer,extra4_answer,extra5_answer,user_id) values (?,?,?,?,?,?);', [answer1, answer2, answer3, answer4, answer5, userId], callback)
-  },
-  updateStadingsAnswersByUser: (userId, answer1, answer2, answer3, callback) => {
-    return db.query('update questionsAndAnswers set answer_champion=?,answer_runnerup=?,answer_thirdplace=? where user_id=?;', [answer1, answer2, answer3, userId], callback)
-  },
-  updateTopScorerAnswersByUser: (userId, answer, callback) => {
-    return db.query('update questionsAndAnswers set answer_topScorer=? where user_id=?;', [answer, userId], callback)
-  },
-  updateExtraQuestionAnswersByUser: (userId, answer1, answer2, answer3, answer4, answer5, callback) => {
-    return db.query('update questionsAndAnswers set extra1_answer=?,extra2_answer=?,extra3_answer=?,extra4_answer=?,extra5_answer=? where user_id=?;', [answer1, answer2, answer3, answer4, answer5, userId], callback)
+  setAnswerByUser: (userId, category, answer, callback) => {
+    return db.query(Queries.setAnswerByUser, [answer, category, userId], callback)
   },
   userHasAnsweredQuestions: (userId, callback) => {
-    return db.query('select count(1) from questionsAndAnswers where user_id=?', [userId], callback)
+    return db.query(Queries.userHasAnsweredQuestions, [userId], callback)
   }
 };
 

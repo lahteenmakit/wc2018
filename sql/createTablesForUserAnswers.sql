@@ -1,56 +1,46 @@
-create table users (
-	user_id int NOT NULL AUTO_INCREMENT,
-	username varchar(20) not null,
-	email varchar(50) not null,
-	password binary(60) not null,
-	primary key(id)
+CREATE TABLE users (
+	user_id INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(20) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	password BINARY(60) NOT NULL,
+	PRIMARY KEY(user_id)
 );
 
-create table questionsAndAnswers (
-	id int NOT NULL AUTO_INCREMENT,
-  user_id int NOT NULL,
-	answer_champion varchar(30),
-  answer_runnerup varchar(30),
-  answer_thirdplace varchar(30),
-	answer_topScorer varchar(40),
-	extra1_question varchar(100),
-	extra1_answer varchar(10),
-	extra2_question varchar(100),
-	extra2_answer varchar(10),
-	extra3_question varchar(100),
-	extra3_answer varchar(10),
-	extra4_question varchar(100),
-	extra4_answer varchar(10),
-	extra5_question varchar(100),
-	extra5_answer varchar(10),
-	primary key(id),
-  foreign key(user_id) references users(user_id)
+CREATE TABLE questionsAndAnswers (
+	id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+	category VARCHAR(40),
+	question VARCHAR(100),
+	questionType VARCHAR(40),
+	answer VARCHAR(20),
+	PRIMARY KEY(id),
+	FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
-/*
-create table scorersAnswers (
-	id int NOT NULL AUTO_INCREMENT,
-  user_id int NOT NULL,
-	answer_champion varchar(40),
-  answer_runnerup varchar(40),
-  answer_thirdplace varchar(40),
-	primary key(id),
-  foreign key(user_id) references users(user_id)
+CREATE TABLE matches (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	matchNumber INT NOT NULL,
+	stage VARCHAR(10),
+	date VARCHAR(20),
+	location VARCHAR(80),
+	homeTeam VARCHAR(30),
+	awayTeam VARCHAR(30),
+	groupNumber VARCHAR(10),
+	homeGoals INT,
+	awayGoals INT,
+	matchEnded INT,
+	PRIMARY KEY(id),
+	FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
-create table extrasAnswers (
-	id int NOT NULL AUTO_INCREMENT,
-  user_id int NOT NULL,
-  question1 varchar(100),
-  answer1 varchar(10),
-  question2 varchar(100),
-  answer2 varchar(10),
-  question3 varchar(100),
-  answer3 varchar(10),
-  question4 varchar(100),
-  answer4 varchar(10),
-  question5 varchar(100),
-  answer5 varchar(10),
-	primary key(id),
-  foreign key(user_id) references users(user_id)
-);*/
+INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer)
+VALUES (1, 'standings_champion', 'Champion', 'multipleChoice', ''),
+			 (1, 'standings_runnerUp', 'Runner-up', 'multipleChoice', ''),
+			 (1, 'standings_thirdPlace', '3rd place', 'multipleChoice', ''),
+			 (1, 'scorers_topScorer', 'Top Scorer', 'multipleChoice', ''),
+			 (1, 'extras_questions1', 'Extra Question 1', '', ''),
+			 (1, 'extras_questions2', 'Extra Question 2', '', ''),
+			 (1, 'extras_questions3', 'Extra Question 3', '', ''),
+			 (1, 'extras_questions4', 'Extra Question 4', '', ''),
+			 (1, 'extras_questions5', 'Extra Question 5', '', '');

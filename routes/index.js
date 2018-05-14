@@ -19,7 +19,7 @@ router.get('/', (req, res, next) => {
 
 //Quiz stuff. Write a function. quizDoneAlreadyYesOrNo(). don't show quiz if done already for user.
 router.get('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
-  Match.getAllMatches( (err, rows) => {
+  Match.getGroupStageMatches( (err, rows) => {
     if (err) {
       res.json(err);
     } else {
@@ -36,19 +36,11 @@ router.post('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
   for(var i in answers) {
     if(i.includes('homeGoals')) {
       var match = {};
-      match['matchId'] = i.split('-')[0];
-      /*match['userId'] = User.getUsernameById(req.user, (err, rows) => {
-        if (err) {
-            error += err;
-        } else {
-            success += rows;
-        }
-      });*/
-      match['userId'] = 'test';
+      match['matchNumber'] = i.split('-')[0];
       match['homeGoals'] = answers[i];
     } else {
       match['awayGoals'] = answers[i];
-      Match.setMatchResult(match.matchId, match.userId, match.homeGoals, match.awayGoals, (err, rows) => {
+      Match.setMatchResultForUser(match.homeGoals, match.awayGoals, req.user.user_id, match.matchNumber, (err, rows) => {
         if (err) {
             error += err;
         } else {
@@ -137,7 +129,16 @@ router.post('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
 
 //Tähän jäätiin
 router.get('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
-  res.render('quiz-extras');
+  QuestionAnswer.getAllExtraQuestions((err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      console.log(rows)
+      res.render('quiz-extras', {
+        questions: rows
+      });
+    }
+  });
 });
 
 router.post('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
@@ -206,6 +207,12 @@ router.post('/register', (req, res, next) => {
 
             console.log(user_id)
             req.login(user_id, (err) => {
+              Match.insertMatchesForUsers(user_id.user_id, (error, rows) => {
+                if(error) throw error;
+              });
+              QuestionAnswer.insertQuestionsForUsers(user_id.user_id, (error, rows) => {
+                if(error) throw error;
+              });
               res.redirect('/');
             })
           });
