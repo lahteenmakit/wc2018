@@ -13,10 +13,10 @@
         <tbody>
           {{#each questions}}
             <tr>
-              <td>{{this}}
+              <td>{{this.question}}
               </td>
               <td>
-                <input class="form-control" name="as" type='text' placeholder="Answer" required>
+                <input class="form-control" name={{this.category}} type='text' placeholder="Answer" required>
               </td>
             </tr>
           {{/each}}

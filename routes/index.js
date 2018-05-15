@@ -48,7 +48,6 @@ router.post('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
         }
       });
     }
-    console.log(match);
   }
   error != '' ? res.json(error) : res.redirect('/quiz/standings');
 });
@@ -68,29 +67,16 @@ router.get('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
 router.post('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
-  QuestionAnswer.userHasAnsweredQuestions(req.user.user_id, (err, rows) => {
-    if (err) {
-      error += err;
-    } else {
-      if(rows[0]['count(1)'] == 0) {
-        QuestionAnswer.setStadingsAnswersByUser(req.user.user_id, answers.champion, answers.runnerUp, answers.thirdPlace, (err, rows) => {
-          if (err) {
-              error += err;
-          } else {
-              success += rows;
-          }
-        });
+  for(var i in answers) {
+    var category = i;
+    QuestionAnswer.setAnswerByUser(req.user.user_id, category, answers[i], (err, rows) => {
+      if (err) {
+          error += err;
       } else {
-        QuestionAnswer.updateStadingsAnswersByUser(req.user.user_id, answers.champion, answers.runnerUp, answers.thirdPlace, (err, rows) => {
-          if (err) {
-              error += err;
-          } else {
-              success += rows;
-          }
-        });
+          success += rows;
       }
-    }
-  });
+    });
+  }
   error != '' ? res.json(error) : res.redirect('/quiz/scorers');
 });
 
@@ -101,39 +87,23 @@ router.get('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
 router.post('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
-  QuestionAnswer.userHasAnsweredQuestions(req.user.user_id, (err, rows) => {
-    if (err) {
-      error += err;
-    } else {
-      if(rows[0]['count(1)'] == 0) {
-        QuestionAnswer.setTopScorerAnswersByUser(req.user.user_id, answers.answer, (err, rows) => {
-          if (err) {
-              error += err;
-          } else {
-              success += rows;
-          }
-        });
+  for(var i in answers) {
+    QuestionAnswer.setAnswerByUser(req.user.user_id, 'scorers_topScorer', answers[i], (err, rows) => {
+      if (err) {
+          error += err;
       } else {
-        QuestionAnswer.updateTopScorerAnswersByUser(req.user.user_id, answers.answer, (err, rows) => {
-          if (err) {
-              error += err;
-          } else {
-              success += rows;
-          }
-        });
+          success += rows;
       }
-    }
-  });
+    });
+  }
   error != '' ? res.json(error) : res.redirect('/quiz/extras');
 });
 
-//Tähän jäätiin
 router.get('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
-  QuestionAnswer.getAllExtraQuestions((err, rows) => {
+  QuestionAnswer.getExtraQuestions((err, rows) => {
     if (err) {
       res.json(err);
     } else {
-      console.log(rows)
       res.render('quiz-extras', {
         questions: rows
       });
@@ -142,10 +112,31 @@ router.get('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
 });
 
 router.post('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
-  res.redirect('/quiz/done');
+  var answers = req.body;
+  var success = '', error = '';
+  for(var i in answers) {
+    var category = i;
+    QuestionAnswer.setAnswerByUser(req.user.user_id, category, answers[i], (err, rows) => {
+      if (err) {
+          error += err;
+      } else {
+          success += rows;
+      }
+    });
+  }
+  if(error) {
+    res.json(error);
+  } else {
+    User.setQuizDone(req.user.user_id, (err, rows) => {
+      if(err) throw err;
+      else res.redirect('/quiz/done');
+    });
+  }
 });
 
+//Tässä.. Tee quizdone funktio - async db.query ja kaikki se paska
 router.get('/quiz/done', authenticationMiddleware(), (req, res, next) => {
+
   res.render('quiz-done');
 });
 
@@ -154,7 +145,15 @@ router.get('/register', (req, res, next) => {
 });
 
 router.get('/profile', authenticationMiddleware(), (req, res, next) => {
-  res.render('profile', {title: 'Profile'});
+  User.getUsernameById(req.user.user_id, (err, rows) => {
+    if(err) {
+      res.json(err);
+    } else {
+      res.render('profile', {
+        username: rows[0].username
+      });
+    }
+  });
 });
 
 router.get('/login', (req, res, next) => {
@@ -162,7 +161,7 @@ router.get('/login', (req, res, next) => {
 });
 
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/home',
+  successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
 })
@@ -205,7 +204,7 @@ router.post('/register', (req, res, next) => {
 
             const user_id = results[0];
 
-            console.log(user_id)
+            console.log('User: ' + user_id.user_id)
             req.login(user_id, (err) => {
               Match.insertMatchesForUsers(user_id.user_id, (error, rows) => {
                 if(error) throw error;

@@ -1,22 +1,34 @@
 const Queries = {
   /**USERS**/
-  addUser: "INSERT INTO users(username, email, password) VALUES (?, ?, ?);",
+  addUser: "INSERT INTO users(username, email, password, points, quizDone) VALUES (?, ?, ?, 0, 0);",
+  addPoints: "UPDATE users SET points = points + ? WHERE user_id=?;",
+  initQuizAndPoints: "UPDATE users SET points=0,quizDone=0 WHERE user_id=?;",
   getAllUsers: "SELECT * FROM users;",
   getUsernameById: "SELECT username FROM users WHERE user_id=?;",
+  getPoints: "SELECT points FROM users WHERE user_id=?;",
+  getQuizDone: "SELECT quizDone FROM users WHERE user_id=?;",
+  setQuizDone: "UPDATE users SET quizDone=1 WHERE user_id=?;",
 
   /**MATCHES**/
   getAllMatches: "SELECT * FROM matches;",
   getGroupStageMatches: "SELECT * FROM matches WHERE stage='group' AND user_id=1;",
-  setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=1 WHERE user_id=? AND matchNumber=?;",
-  insertMatchesForUsers:  "INSERT INTO matches(user_id,matchNumber,stage,date,location,homeTeam,awayTeam,groupNumber,homeGoals,awayGoals,matchEnded) VALUES ?",
+  setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=? WHERE user_id=? AND matchNumber=?;",
+  insertMatchesForUsers: "INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded) " +
+                         "SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded " +
+                         "FROM matches WHERE user_id=1;",
 
-  /*QUESTIONS AND ANSWERS*/
+  /**TEAMS**/
+  getAllTeams: "SELECT DISTINCT homeTeam FROM matches WHERE stage='group' AND NOT homeTeam ='' ORDER BY homeTeam ASC;",
+
+  /**QUESTIONS AND ANSWERS**/
   getAnswersByUser: "SELECT FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
-  getExtraQuestions: "SELECT DISTINCT question FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
+  getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?",
-  insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer) VALUES ?"
+  insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer) " +
+                           "SELECT ?, category, question, questionType, answer " +
+                           "FROM questionsAndAnswers WHERE user_id=1;"
 }
 
 module.exports = Queries;

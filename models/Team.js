@@ -1,11 +1,9 @@
 const db = require('../dbconnection');
+const Queries = require('./Queries.js');
 
 const Team = {
   getAllTeams: (callback) => {
-    return db.query("select distinct homeTeam from matches where not homeTeam ='' order by homeTeam ASC", callback);
-  },
-  getTeamStats: (id, callback) => {
-    return db.query("select * from matches where homeTeam=? OR awayTeam=?", [id,id], callback);
+    return db.query(Queries.getAllTeams, callback);
   }
 };
 

@@ -16,9 +16,9 @@
         <tr>
           <td>Champion</td>
           <td>
-            <select name="champion" class="selectpicker">
+            <select name="standings_champion" class="selectpicker">
               {{#each teams}}
-                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+                <option value="{{this.homeTeam}}">{{this.homeTeam}}</option>
               {{/each}}
             </select>
           </td>
@@ -26,9 +26,9 @@
         <tr>
           <td>Runner-up</td>
           <td>
-            <select name="runnerUp" class="selectpicker">
+            <select name="standings_runnerUp" class="selectpicker">
               {{#each teams}}
-                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+                <option value="{{this.homeTeam}}">{{this.homeTeam}}</option>
               {{/each}}
             </select>
           </td>
@@ -36,9 +36,9 @@
         <tr>
           <td>3rd place</td>
           <td>
-            <select name="thirdPlace" class="selectpicker">
+            <select name="standings_thirdPlace" class="selectpicker">
               {{#each teams}}
-                <option value={{this.homeTeam}}>{{this.homeTeam}}</option>
+                <option value="{{this.homeTeam}}">{{this.homeTeam}}</option>
               {{/each}}
             </select>
           </td>
