@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const db = require('../dbconnection');
+const Queries = require('../models/Queries.js');
 
 const User = require('../models/User.js');
 const Match = require('../models/Match.js');
@@ -17,8 +18,7 @@ router.get('/', (req, res, next) => {
   res.render('home', {title: 'Home'});
 });
 
-//Quiz stuff. Write a function. quizDoneAlreadyYesOrNo(). don't show quiz if done already for user.
-router.get('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
+router.get('/quiz/matches', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   Match.getGroupStageMatches( (err, rows) => {
     if (err) {
       res.json(err);
@@ -52,7 +52,7 @@ router.post('/quiz/matches', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/standings');
 });
 
-router.get('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
+router.get('/quiz/standings', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   Team.getAllTeams( (err, rows) => {
     if (err) {
       res.json(err);
@@ -80,7 +80,7 @@ router.post('/quiz/standings', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/scorers');
 });
 
-router.get('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
+router.get('/quiz/scorers', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   res.render('quiz-scorers');
 });
 
@@ -99,7 +99,7 @@ router.post('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/extras');
 });
 
-router.get('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
+router.get('/quiz/extras', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   QuestionAnswer.getExtraQuestions((err, rows) => {
     if (err) {
       res.json(err);
@@ -134,11 +134,31 @@ router.post('/quiz/extras', authenticationMiddleware(), (req, res, next) => {
   }
 });
 
-//Tässä.. Tee quizdone funktio - async db.query ja kaikki se paska
 router.get('/quiz/done', authenticationMiddleware(), (req, res, next) => {
-
-  res.render('quiz-done');
+  res.render('quiz-done')
 });
+
+function getQuizDone() {
+  return (req, res, next) => {
+    if(req.isAuthenticated()) {
+      User.getQuizDone(req.user.user_id, (err, rows) => {
+        if(err) throw err;
+        else {
+          var quizDone = rows[0].quizDone;
+          if(quizDone == 1)
+            res.redirect('/quiz/done');
+          else {
+            return next();
+          }
+        }
+      });
+    } else {
+      res.redirect('/login');
+    }
+
+
+  }
+}
 
 router.get('/register', (req, res, next) => {
   res.render('register', {title: 'Registration'});

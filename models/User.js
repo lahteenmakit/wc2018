@@ -20,6 +20,9 @@ const User = {
   getPoints: (id, callback) => {
     return db.query(Queries.getPoints, [id], callback);
   },
+  getQuizDone: (id, callback) => {
+    return db.query(Queries.getQuizDone, [id], callback);
+  },
   setQuizDone: (id, callback) => {
     return db.query(Queries.setQuizDone, [id], callback);
   }
