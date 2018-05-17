@@ -169,8 +169,17 @@ router.get('/profile', authenticationMiddleware(), (req, res, next) => {
     if(err) {
       res.json(err);
     } else {
-      res.render('profile', {
-        username: rows[0].username
+      var username = rows[0].username;
+      User.getPoints(req.user.user_id, (err, rows) => {
+        if(err) {
+          res.json(err);
+        } else {
+          var points = rows[0].points;
+          res.render('profile', {
+            username: username,
+            points: points
+          });
+        }
       });
     }
   });

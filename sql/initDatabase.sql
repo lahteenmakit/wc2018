@@ -3,6 +3,8 @@ CREATE TABLE users (
 	username VARCHAR(20) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	password BINARY(60) NOT NULL,
+	points int,
+	quizDone int,
 	PRIMARY KEY(user_id)
 );
 

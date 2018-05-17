@@ -15,7 +15,7 @@ const Queries = {
   setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=? WHERE user_id=? AND matchNumber=?;",
   insertMatchesForUsers: "INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded) " +
                          "SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded " +
-                         "FROM matches WHERE user_id=1;",
+                         "FROM matches_base;",
 
   /**TEAMS**/
   getAllTeams: "SELECT DISTINCT homeTeam FROM matches WHERE stage='group' AND NOT homeTeam ='' ORDER BY homeTeam ASC;",
@@ -28,7 +28,7 @@ const Queries = {
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?",
   insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer) " +
                            "SELECT ?, category, question, questionType, answer " +
-                           "FROM questionsAndAnswers WHERE user_id=1;"
+                           "FROM questionsAndAnswers_base;"
 }
 
 module.exports = Queries;
