@@ -21,7 +21,6 @@
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "bookshelf": "^0.13.3",
-    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
@@ -31,19 +30,12 @@
     "express-validator": "^5.2.0",
     "handlebars": "^4.0.11",
     "http": "0.0.0",
-    "jquery": "^3.3.1",
     "knex": "^0.14.6",
     "moment": "^2.22.1",
     "mysql2": "^1.5.3",
     "nodemon": "^1.17.3",
     "passport": "^0.4.0",
-    "path": "^0.12.7",
-    "semantic-ui": "^2.3.1",
-    "socket.io": "^2.1.0",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.15"
+    "path": "^0.12.7"
   },
-  "devDependencies": {
-    "webpack-cli": "^2.0.15"
-  }
+  "devDependencies": {}
 }
