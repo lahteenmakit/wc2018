@@ -8,8 +8,14 @@
   {{/each}}
 {{/if}}
 
+<style>
+  #loginContainer {
+    max-width: 600px;
+  }
+</style>
+
 <div id="loginContainer" class="container">
-  <h2>Login</h2>
+  <h1>Login</h1>
     <form method="POST" action="/login">
       <div class="form-group">
         <input type="text" class="form-control" name="username" placeholder="Username">
