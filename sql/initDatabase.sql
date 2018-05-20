@@ -30,7 +30,7 @@ CREATE TABLE matches_base (
 
 CREATE TABLE questionsAndAnswers (
 	id INT NOT NULL AUTO_INCREMENT,
-  	user_id INT NOT NULL,
+  user_id INT NOT NULL,
 	category VARCHAR(40),
 	question VARCHAR(100),
 	questionType VARCHAR(40),
@@ -51,6 +51,13 @@ CREATE TABLE matches (
 	homeGoals INT,
 	awayGoals INT,
 	matchEnded INT,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE teams (
+	id INT NOT NULL AUTO_INCREMENT,
+	name varchar(25),
+	flagFileName varchar(30),
 	PRIMARY KEY(id)
 );
 
@@ -135,3 +142,38 @@ VALUES
 ('extras_questions3', 'Extra Question 3', '', ''),
 ('extras_questions4', 'Extra Question 4', '', ''),
 ('extras_questions5', 'Extra Question 5', '', '');
+
+INSERT INTO TEAMS (name, flagFileName)
+VALUES
+('Egypt','egypt.png'),
+('Russia','russia.png'),
+('Saudi Arabia','saudi arabia.png'),
+('Uruguay','uruguay.png'),
+('Iran','iran.png'),
+('Morocco','morocco.png'),
+('Portugal','portugal.png'),
+('Spain','spain.png'),
+('Australia','australia.png'),
+('Denmark','denmark.png'),
+('France','france.png'),
+('Peru','peru.png'),
+('Argentina','argentina.png'),
+('Croatia','croatia.png'),
+('Iceland','iceland.png'),
+('Nigeria','nigeria.png'),
+('Brazil','brazil.png'),
+('Costa Rica','costa rica.png'),
+('Serbia','serbia.png'),
+('Switzerland','switzerland.png'),
+('Germany','germany.png'),
+('Mexico','mexico.png'),
+('Korea Republic','korea republic.png'),
+('Sweden','sweden.png'),
+('Belgium','belgium.png'),
+('England','england.png'),
+('Panama','panama.png'),
+('Tunisia','tunisia.png'),
+('Colombia','colombia.png'),
+('Japan','japan.png'),
+('Poland','poland.png'),
+('Senegal','senegal.png');

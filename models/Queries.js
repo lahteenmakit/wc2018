@@ -18,7 +18,12 @@ const Queries = {
                          "FROM matches_base;",
 
   /**TEAMS**/
-  getAllTeams: "SELECT DISTINCT homeTeam FROM matches WHERE stage='group' AND NOT homeTeam ='' ORDER BY homeTeam ASC;",
+  getAllTeams: `SELECT DISTINCT matches.homeTeam AS team, teams.flagFileName
+                FROM matches
+                INNER JOIN teams
+                ON matches.homeTeam=teams.name
+                AND matches.user_id=1
+                ORDER BY matches.homeTeam ASC;`,
 
   /**QUESTIONS AND ANSWERS**/
   getAnswersByUser: "SELECT FROM questionsAndAnswers WHERE user_id=?;",

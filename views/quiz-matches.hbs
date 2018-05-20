@@ -21,11 +21,17 @@
                   {{this.groupNumber}} <br>
                   {{this.location}} <br>
               </td>
+              <td>
+                  <img src="/public/images/flags/{{parseImgFileName this.homeTeam}}" height="20" width="40">
+              </td>
               <td>{{this.homeTeam}}
                   <input class="form-control" name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals" required>
               </td>
               <td>{{this.awayTeam}}
                   <input class="form-control" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals" required>
+              </td>
+              <td>
+                  <img src="/public/images/flags/{{parseImgFileName this.awayTeam}}" height="20" width="40">
               </td>
             </tr>
           {{/each}}
