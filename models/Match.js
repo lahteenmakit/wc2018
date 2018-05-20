@@ -8,6 +8,9 @@ const Match = {
   getGroupStageMatches: (callback) => {
     return db.query(Queries.getGroupStageMatches, callback);
   },
+  getUserAnswersForMatches: (user_id, callback) => {
+    return db.query(Queries.getUserAnswersForMatches, [user_id], callback);
+  },
   setMatchResultForUser: (homeGoals, awayGoals, user_id, matchNumber, callback) => {
     var matchEnded = (user_id == 1) ? 1 : 0;
     console.log(user_id + "   " + matchEnded)

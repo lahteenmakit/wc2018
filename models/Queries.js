@@ -16,6 +16,7 @@ const Queries = {
   insertMatchesForUsers: "INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded) " +
                          "SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded " +
                          "FROM matches_base;",
+  getUserAnswersForMatches: "SELECT homeTeam, awayTeam, homeGoals, awayGoals FROM matches WHERE user_id=? AND stage='group';",
 
   /**TEAMS**/
   getAllTeams: `SELECT DISTINCT matches.homeTeam AS team, teams.flagFileName
@@ -26,7 +27,7 @@ const Queries = {
                 ORDER BY matches.homeTeam ASC;`,
 
   /**QUESTIONS AND ANSWERS**/
-  getAnswersByUser: "SELECT FROM questionsAndAnswers WHERE user_id=?;",
+  getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
   getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",

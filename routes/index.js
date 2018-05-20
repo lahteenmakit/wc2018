@@ -176,9 +176,26 @@ router.get('/profile', authenticationMiddleware(), (req, res, next) => {
           res.json(err);
         } else {
           var points = rows[0].points;
-          res.render('profile', {
-            username: username,
-            points: points
+          Match.getUserAnswersForMatches(req.user.user_id, (err, rows) => {
+            if(err) {
+              res.json(err);
+            } else {
+              var matches = rows;
+              //quizDone? 
+              QuestionAnswer.getAnswersByUser(req.user.user_id, (err, rows) => {
+                if(err) {
+                  res.json(err);
+                } else {
+                  var answers = rows;
+                  res.render('profile', {
+                    username: username,
+                    points: points,
+                    matches: matches,
+                    answers: answers
+                  });
+                }
+              });
+            }
           });
         }
       });
