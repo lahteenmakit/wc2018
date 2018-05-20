@@ -57,7 +57,7 @@ CREATE TABLE matches (
 /*INSERT INTO users admin*/
 
 INSERT INTO matches_base (matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded)
-VALUES 
+VALUES
 (1,'group','14/06/2018 18:00','Luzhniki Stadium / Moscow','Russia','Saudi Arabia','Group A',0,0,0),
 (2,'group','15/06/2018 15:00','Ekaterinburg Stadium','Egypt','Uruguay','Group A',0,0,0),
 (3,'group','15/06/2018 18:00','Saint Petersburg Stadium','Morocco','Iran','Group B',0,0,0),
@@ -129,6 +129,7 @@ VALUES
 ('standings_runnerUp', 'Runner-up', 'multipleChoice', ''),
 ('standings_thirdPlace', '3rd place', 'multipleChoice', ''),
 ('scorers_topScorer', 'Top Scorer', 'multipleChoice', ''),
+('scorers_goals', 'Goals', 'numberInput', ''),
 ('extras_questions1', 'Extra Question 1', '', ''),
 ('extras_questions2', 'Extra Question 2', '', ''),
 ('extras_questions3', 'Extra Question 3', '', ''),

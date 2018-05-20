@@ -88,7 +88,8 @@ router.post('/quiz/scorers', authenticationMiddleware(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    QuestionAnswer.setAnswerByUser(req.user.user_id, 'scorers_topScorer', answers[i], (err, rows) => {
+    var category = i;
+    QuestionAnswer.setAnswerByUser(req.user.user_id, category, answers[i], (err, rows) => {
       if (err) {
           error += err;
       } else {
