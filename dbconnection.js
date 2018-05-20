@@ -6,7 +6,6 @@ const connection = mysql.createConnection({
     password: process.env.RDS_PASSWORD,
     database: process.env.RDS_DB_NAME,
     port: process.env.RDS_PORT,
-    socketPath: '/var/run/mysqld/mysqld.sock'
 });
 
 connection.connect(function(err) {
