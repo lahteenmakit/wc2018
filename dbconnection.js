@@ -5,12 +5,13 @@ const connection = mysql.createConnection({
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
     database: process.env.RDS_DB_NAME,
-    port: process.env.RDS_PORT
+    port: process.env.RDS_PORT,
+    socketPath: '/var/run/mysqld/mysqld.sock'
 });
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("Connected to Database!");
+  console.log('Connected to Database!');
 });
 
 module.exports = connection;
