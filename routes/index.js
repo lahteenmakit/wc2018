@@ -19,7 +19,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/quiz/matches', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
-  Match.getGroupStageMatches( (err, rows) => {
+  Match.getGroupStageMatches((err, rows) => {
     if (err) {
       res.json(err);
     } else {
