@@ -143,7 +143,7 @@ VALUES
 ('extras_questions4', 'Extra Question 4', '', ''),
 ('extras_questions5', 'Extra Question 5', '', '');
 
-INSERT INTO TEAMS (name, flagFileName)
+INSERT INTO teams (name, flagFileName)
 VALUES
 ('Egypt','egypt.png'),
 ('Russia','russia.png'),
