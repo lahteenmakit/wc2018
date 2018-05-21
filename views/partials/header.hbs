@@ -15,13 +15,13 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-        <style>
-          body {
+
+        <!-- Place favicon.ico in the root directory -->
+         <style>
+          body, a {
             font-size: 20px;
           }
         </style>
-
-        <!-- Place favicon.ico in the root directory -->
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -32,6 +32,7 @@
           <a class="item" href="/">
             Home
           </a>
+          {{#if isAuthenticated}}
           <a class="item" href="/profile">>
             My Profile
           </a>
@@ -40,4 +41,14 @@
               Logout
             </a>
           </div>
+          {{else}}
+          <div class="right menu">
+            <a class="item" href="/register">>
+              Register
+            </a>
+            <a class="item" href="/login">>
+              Login
+            </a>
+          </div>
+          {{/if}}
       </div>

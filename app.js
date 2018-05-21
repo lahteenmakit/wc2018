@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt');
 
 require('dotenv').config();
 
+const config = require('./config');
 const db = require('./dbconnection');
 
 const Match = require('./models/Match.js');
@@ -36,12 +37,13 @@ app.use(cookieParser());
 app.use(expressValidator());
 app.use('/public', express.static(__dirname + '/public'));
 
-const options = {
+/*const options = {
     host: process.env.RDS_HOSTNAME,
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
     database: process.env.RDS_DB_NAME
-};
+};*/
+const options = config.db;
 
 var sessionStore = new MySQLStore(options);
 
