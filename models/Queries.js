@@ -9,6 +9,11 @@ const Queries = {
   getQuizDone: "SELECT quizDone FROM users WHERE user_id=?;",
   setQuizDone: "UPDATE users SET quizDone=1 WHERE user_id=?;",
 
+  /**LEAGUES**/
+  createLeague: "INSERT INTO leagues (name, password) VALUES (?, ?);",
+  addUserToLeague: "INSERT INTO users_leagues (user_id, league_id) VALUES (?, ?);",
+  getLeagueByNameAndPassword: "SELECT * FROM leagues WHERE name=? AND password=?;",
+
   /**MATCHES**/
   getAllMatches: "SELECT * FROM matches;",
   getGroupStageMatches: "SELECT * FROM matches WHERE stage='group' AND user_id=1;",

@@ -1,0 +1,23 @@
+{{> header }}
+
+{{#if notFound}}
+    <div class="alert alert-danger container">
+      {{this.notFound}}
+    </div>
+{{/if}}
+
+<div class="container">
+	<h1>Join a league</h1>
+	<p>Insert name and password for your league.</p>
+	<form method="POST" action="/league/join" class="ui form">
+		<div class="field">
+		    <label>League name</label>
+		    <input type="text" name="leagueName" placeholder="Name" required>
+  		</div>
+  		<div class="field">
+		    <label>League password</label>
+		    <input type="password" name="leaguePassword" placeholder="Password" required>
+  		</div>
+    	<input type="submit" class="ui positive basic button" value="Join league" />
+	</form>
+</div>

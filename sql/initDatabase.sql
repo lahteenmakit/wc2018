@@ -8,6 +8,20 @@ CREATE TABLE users (
 	PRIMARY KEY(user_id)
 );
 
+CREATE TABLE leagues (
+	league_id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(20) UNIQUE NOT NULL, 
+	password VARCHAR(20) NOT NULL,
+	PRIMARY KEY(league_id)
+);
+
+CREATE TABLE users_leagues (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	league_id INT NOT NULL,
+	PRIMARY KEY(id)
+);
+
 CREATE TABLE questionsAndAnswers_base (
 	category VARCHAR(40),
 	question VARCHAR(100),

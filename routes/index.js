@@ -9,6 +9,7 @@ const db = require('../dbconnection');
 const Queries = require('../models/Queries.js');
 
 const User = require('../models/User.js');
+const League = require('../models/League.js');
 const Match = require('../models/Match.js');
 const Team = require('../models/Team.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
@@ -202,6 +203,72 @@ router.get('/profile', authenticationMiddleware(), (req, res, next) => {
     }
   });
 });
+
+router.get('/quiz/league', (req, res, next) => {
+
+  res.render('quiz-league', {title: 'League'});
+});
+
+router.get('/league/join', (req, res, next) => {
+  res.render('league-join');
+});
+
+router.post('/league/join', (req, res, next) => {
+  League.getLeagueByNameAndPassword(req.body.leagueName, req.body.leaguePassword, (err, rows) => {
+    if(err) throw err;
+    else {
+      if(rows.length == 0) {
+        res.render('league-join', {
+          notFound: 'ERROR! Did not find a league with that name and password.'
+        })
+      } else {
+        var league_id = rows[0].league_id;
+        League.addUserToLeague(req.user.user_id, league_id, (err, rows) => {
+          if(err) throw err;
+          else {
+            res.redirect('/leagues/' + league_id);
+          }
+        });
+      }
+    }
+  });
+});
+
+router.get('/league/create', (req, res, next) => {
+  res.render('league-create');
+});
+
+router.post('/league/create', (req, res, next) => {
+  League.createLeague(req.body.leagueName, req.body.leaguePassword, (err, rows) => {
+    if(err) throw err;
+    else {
+      db.query('SELECT last_insert_id() AS league_id', (error, results, fields) => {
+        if(error) throw error;
+        else {
+          var league_id = results[0].league_id;
+          League.addUserToLeague(req.user.user_id, league_id, (err, rows) => {
+            if(err) throw err;
+            else {
+              res.redirect('/leagues/' + league_id);
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+router.get('/leagues/:id', (req, res, next) => {
+  
+  res.render('league', {title: 'League'});
+});
+
+
+router.post('/leagues/:id', (req, res, next) => {
+  
+  //res.render('league', {title: 'League'});
+});
+
 
 router.get('/login', (req, res, next) => {
   res.render('login', {title: 'Login'});
