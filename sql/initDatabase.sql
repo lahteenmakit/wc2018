@@ -61,9 +61,9 @@ CREATE TABLE matches (
 	homeTeam VARCHAR(30),
 	awayTeam VARCHAR(30),
 	groupNumber VARCHAR(10),
-	homeGoals INT,
-	awayGoals INT,
-	matchEnded INT,
+	homeGoals INT DEFAULT(0),
+	awayGoals INT DEFAULT(0),
+	matchEnded INT DEFAULT(0),
 	PRIMARY KEY(id)
 );
 

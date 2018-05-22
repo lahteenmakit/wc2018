@@ -34,9 +34,9 @@ const Queries = {
   getAllMatches: "SELECT * FROM matches;",
   getGroupStageMatches: "SELECT * FROM matches WHERE stage='group' AND user_id=1;",
   setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=? WHERE user_id=? AND matchNumber=?;",
-  insertMatchesForUsers: "INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded) " +
-                         "SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded " +
-                         "FROM matches_base;",
+  insertMatchesForUsers: `INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber)
+                         SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber
+                         FROM matches_base;`,
   getUserAnswersForMatches: "SELECT homeTeam, awayTeam, homeGoals, awayGoals FROM matches WHERE user_id=? AND stage='group';",
 
   /**TEAMS**/
