@@ -9,13 +9,14 @@
 	</div>
 {{/if}}
 
-<div class="container">
-	<h1>Welcome to League {{usersInLeague.0.league_name}}!</h1>
-	<p>Rankings</p>
+<div class="ui container">
+	<h1>Welcome to {{usersInLeague.0.league_name}}!</h1>
+	<h2>Rankings</h2>
 	<div>
-		<table class="ui very basic collapsing celled table">
+		<table class="ui celled table">
 			<thead>
 			    <tr>
+			    	<th>Rank</th>
 				    <th>User</th>
 				    <th>Points</th>
 			  	</tr>
@@ -23,6 +24,7 @@
 			<tbody>
 				{{#each usersInLeague}}
 					<tr>
+						<td class="collapsing">{{addOne @index}}</td>	
 						<td>{{this.username}}</td>
 						<td>{{this.points}}</td>
 					</tr>

@@ -1,6 +1,11 @@
 {{> header }}
 
-<div class="container">
+<div class="ui container">
+	<h1>Welcome to WC2018 quiz!</h1>
+	{{#if partOfLeague}}
+	Seems like you are already part of a league. <br><br>
+	Go ahead and <a href="/quiz/matches">start the quiz.</a>
+	{{else}}
 	Before you start the quiz you need to join a league or create a new one. <br><br>
 	<form method="GET" action="/league/join">
     	<input type="submit" class="ui primary basic button" value="Join league" />
@@ -9,4 +14,6 @@
 	<form method="GET" action="/league/create">
     	<input type="submit" class="ui positive basic button" value="Create new league" />
 	</form>
+	{{/if}}
 </div>
+

@@ -1,7 +1,7 @@
 CREATE TABLE users (
 	user_id INT NOT NULL AUTO_INCREMENT,
-	username VARCHAR(20) NOT NULL,
-	email VARCHAR(50) NOT NULL,
+	username VARCHAR(20) NOT NULL UNIQUE,
+	email VARCHAR(50) NOT NULL UNIQUE,
 	password BINARY(60) NOT NULL,
 	points int,
 	quizDone int,
@@ -16,10 +16,9 @@ CREATE TABLE leagues (
 );
 
 CREATE TABLE users_leagues (
-	id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
 	league_id INT NOT NULL,
-	PRIMARY KEY(id)
+	CONSTRAINT PK_user PRIMARY KEY(user_id, league_id)
 );
 
 CREATE TABLE questionsAndAnswers_base (
@@ -44,7 +43,7 @@ CREATE TABLE matches_base (
 
 CREATE TABLE questionsAndAnswers (
 	id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
+  	user_id INT NOT NULL,
 	category VARCHAR(40),
 	question VARCHAR(100),
 	questionType VARCHAR(40),

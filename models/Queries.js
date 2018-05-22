@@ -27,7 +27,8 @@ const Queries = {
                       INNER JOIN leagues
                       ON users_leagues.league_id=leagues.league_id
                       ORDER BY users.points DESC;`,
-  userIsPartOfLeague: "",
+  userIsPartOfLeague: "SELECT COUNT(user_id) FROM users_leagues WHERE user_id=? AND league_id=?;",
+  userIsPartOfAnyLeague: "SELECT COUNT(user_id) FROM users_leagues WHERE user_id=?;",
 
   /**MATCHES**/
   getAllMatches: "SELECT * FROM matches;",

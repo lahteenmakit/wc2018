@@ -1,29 +1,33 @@
-{{> header }}
+{{> header }}    
 
-{{#if errors}}
-  {{#each errors}}
-    <div class="alert alert-danger container">
-      {{this.msg}}
-    </div>
-  {{/each}}
-{{/if}}
+<div id="loginContainer" class="ui container">
+  {{#if errors}}
+    {{#each errors}}
+      <div class="ui negative message">
+        <div class="header">
+          {{this.msg}}
+        </div>
+      </div>
+    {{/each}}
+  {{/if}}
 
-<style>
-  #loginContainer {
-    max-width: 600px;
-  }
-</style>
+  {{#if messages.error}}
+      <div class="ui negative message">
+        <div class="header">
+          {{messages.error}}
+        </div>
+      </div>
+  {{/if}}
 
-<div id="loginContainer" class="container">
   <h1>Login</h1>
-    <form method="POST" action="/login">
-      <div class="form-group">
+    <form class="ui form" method="POST" action="/login">
+      <div class="field">
         <input type="text" class="form-control" name="username" placeholder="Username">
       </div>
-      <div class="form-group">
+      <div class="field">
         <input type="password" class="form-control" name="password" placeholder="Password">
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="ui basic positive large button">Login</button>
       <br>
       <h3>Don't have an account yet? <a href="/register">Register here</a></h3>
     </form>

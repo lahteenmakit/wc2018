@@ -9,6 +9,7 @@ const expressValidator = require('express-validator');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+const flash = require('express-flash');
 
 require('dotenv').config();
 
@@ -36,13 +37,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(expressValidator());
 app.use('/public', express.static(__dirname + '/public'));
+app.use(flash());
 
-/*const options = {
-    host: process.env.RDS_HOSTNAME,
-    user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD,
-    database: process.env.RDS_DB_NAME
-};*/
 const options = config.db;
 
 var sessionStore = new MySQLStore(options);

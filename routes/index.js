@@ -19,6 +19,18 @@ router.get('/', (req, res, next) => {
   res.render('home', {title: 'Home'});
 });
 
+router.get('/quiz/start', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+  League.userIsPartOfAnyLeague(req.user.user_id, (err, rows) => {
+    if(err) throw err;
+    else {
+      var userIsPartOfLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;  
+      res.render('quiz-start', {
+        partOfLeague: userIsPartOfLeague
+      });
+    }
+  });
+});
+
 router.get('/quiz/matches', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   Match.getGroupStageMatches((err, rows) => {
     if (err) {
@@ -157,8 +169,6 @@ function getQuizDone() {
     } else {
       res.redirect('/login');
     }
-
-
   }
 }
 
@@ -204,10 +214,6 @@ router.get('/profile', authenticationMiddleware(), (req, res, next) => {
   });
 });
 
-router.get('/quiz/league', (req, res, next) => {
-
-  res.render('quiz-league', {title: 'League'});
-});
 
 router.get('/league/join', (req, res, next) => {
   res.render('league-join');
@@ -219,12 +225,22 @@ router.post('/league/join', (req, res, next) => {
     else {
       if(rows.length == 0) {
         res.render('league-join', {
-          notFound: 'ERROR! Did not find a league with that name and password.'
+          notFound: 'Did not find a league with that name and password.'
         })
       } else {
         var league_id = rows[0].league_id;
         League.addUserToLeague(req.user.user_id, league_id, (err, rows) => {
-          if(err) throw err;
+          if(err) {
+            console.log(err);
+            switch(err.errno) {
+              case 1062:
+                req.flash('error','You are already a member of this league. Join a different one.');
+                break;
+              default:
+                req.flash('error', 'Database error');
+            }
+            res.redirect('/league/join');
+          } 
           else {
             res.redirect('/leagues/' + league_id);
           }
@@ -233,6 +249,7 @@ router.post('/league/join', (req, res, next) => {
     }
   });
 });
+
 
 router.get('/league/create', (req, res, next) => {
   res.render('league-create');
@@ -269,7 +286,7 @@ router.get('/league/my', (req, res, next) => {
   });
 });
 
-router.get('/leagues/:id', (req, res, next) => {
+router.get('/leagues/:id', accessToLeague(), (req, res, next) => {
   League.getUsersInLeague(req.params.id, (err, rows) => {
     console.log(rows)
     if(err) throw err;
@@ -281,15 +298,34 @@ router.get('/leagues/:id', (req, res, next) => {
   });
 });
 
-
-router.post('/leagues/:id', (req, res, next) => {
-  
-  //res.render('league', {title: 'League'});
-});
+function accessToLeague() {
+  return (req, res, next) => {
+    if(req.isAuthenticated()) {
+      console.log(req.params.id)
+      League.userIsPartOfLeague(req.user.user_id, req.params.id, (err, rows) => {
+        if(err) throw err;
+        else {
+          console.log(rows)
+          var accessToLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;
+          console.log(accessToLeague)
+          if(!accessToLeague) {
+            req.flash('error','You do not have access to this league. If you know the league password, go to My Leagues and join it.');
+            res.redirect('/');
+          }
+          else {
+            return next();
+          }
+        }
+      });
+    } else {
+      res.redirect('/login');
+    }
+  }
+}
 
 
 router.get('/login', (req, res, next) => {
-  res.render('login', {title: 'Login'});
+  res.render('login', {error: req.flash('error')});
 });
 
 router.post('/login', passport.authenticate('local', {
@@ -326,7 +362,11 @@ router.post('/register', (req, res, next) => {
   } else {
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
       User.addUser(req.body.username, req.body.email, hash, (err, results, fields) => {
-        if(err) throw err;
+        if(err) {
+          console.log(err);
+          req.flash('error','A user already exists with that username and/or E-mail. Try another username and/or E-mail.');
+          res.redirect('/register');
+        }
         else {
           db.query('select last_insert_id() as user_id', (error, results, fields) => {
             if(error) {

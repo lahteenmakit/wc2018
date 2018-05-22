@@ -1,28 +1,18 @@
-{{> quiz-header}}
+{{> header}}
 
-<div id="matchesTableDiv" class="container">
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
+<div class="ui container">
   <h1>Extra Questions</h1>
   <p>Guess the answers to the following questions.</p>
   <p>Points: <b> One point for each correct answer </b></p>
   <div id="matchesForm" class="container">
-    <form method="POST" action="/quiz/extras">
-      <table class="table table-striped">
-        <tbody>
-          {{#each questions}}
-            <tr>
-              <td>{{this.question}}
-              </td>
-              <td>
-                <input class="form-control" name={{this.category}} type='text' placeholder="Answer" required>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-      <button type="submit" class="btn btn-primary">Submit your answers</button>
+    <form method="POST" action="/quiz/extras" class="ui form">
+      {{#each questions}}
+      <div class="field">
+        <label>{{this.question}}</label>
+        <input type="text" name={{this.category}} placeholder="Answer">
+      </div>
+      {{/each}}
+      <button type="submit" class="ui basic positive huge button">Submit your answers</button>
     </form>
 
   </div>

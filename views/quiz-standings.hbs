@@ -1,32 +1,29 @@
-{{> quiz-header}}
+{{> header}}
 
-<div id="standingsTableDiv" class="container">
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
+<div id="standingsTableDiv" class="ui container">
+
   <h1>Final standings of the Fifa World cup 2018</h1>
   <p>Guess the TOP 3 teams of the tournament.</p>
   <p>Points: <br>
     Both team AND place correct: <b>5 points</b><br>
     Team correct but place incorrect: <b>2 points</b><br>
   </p>
-  <div id="matchesForm" class="container">
     <form method="POST" action="/quiz/standings">
-      <table class="table">
+      <table class="ui table">
         <tr>
           <td>Champion</td>
           <td>
-            <select name="standings_champion" class="selectpicker">
+            <select name="standings_champion" class="ui fluid search dropdown">
               {{#each teams}}
                 <option value="{{this.team}}">{{this.team}}</option>
-              {{/each}}
+              {{/each}} 
             </select>
           </td>
         </tr>
         <tr>
           <td>Runner-up</td>
           <td>
-            <select name="standings_runnerUp" class="selectpicker">
+            <select name="standings_runnerUp" class="ui fluid search dropdown">
               {{#each teams}}
                 <option value="{{this.team}}">{{this.team}}</option>
               {{/each}}
@@ -36,7 +33,7 @@
         <tr>
           <td>3rd place</td>
           <td>
-            <select name="standings_thirdPlace" class="selectpicker">
+            <select name="standings_thirdPlace" class="ui fluid search dropdown">
               {{#each teams}}
                 <option value="{{this.team}}">{{this.team}}</option>
               {{/each}}
@@ -44,7 +41,7 @@
           </td>
         </tr>
       </table>
-      <button type="submit" class="btn btn-primary">Submit your answers</button>
+      <button type="submit" class="ui basic positive huge button">Submit your answers</button>
     </form>
   </div>
 </div>

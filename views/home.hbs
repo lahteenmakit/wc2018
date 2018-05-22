@@ -9,9 +9,17 @@
 		}
 	</style>
 
+
 	<script type"text/javascript" src="public/js/countdown.js"></script>
 
-    <div id="countdownContainer" class="container">
+    <div id="countdownContainer" class="ui container">
+    	{{#if messages.error}}
+		  <div class="ui negative message">
+		    <div class="header">
+		      {{messages.error}}
+		    </div>
+		  </div>
+		{{/if}}
     	<h2>Welcome to WC2018 app!</h2>
 
 	  	<div id="countdown">
@@ -19,7 +27,7 @@
 		</div>
 		<p>Until Fifa World Cup 2018</p>
 		<br><br><br>
-		<p> More content will appear here soon. Meanwhile take the <a href="/quiz/matches">WC2018 Quiz</a> if you haven't already.</p>
+		<p> More content will appear here soon. Meanwhile take the <a href="/quiz/start">WC2018 Quiz</a> if you haven't already.</p>
 		</div>
 	</div>
 

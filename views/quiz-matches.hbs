@@ -1,15 +1,7 @@
-{{> quiz-header}}
+{{> header}}
 
-<style>
-  #matchesTableDiv {
-    margin-bottom: 100px;
-  }
-</style>
-
-<div id="matchesTableDiv" class="container">
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
+<div id="matchesTableDiv" class="ui container">
+  
   <h1>Group stage match results</h1>
   <p>Guess the result of each match played in the group stage. Enter the number of goals scored by both teams.</p>
   <p>Points: <br>
@@ -17,9 +9,8 @@
     Correct number of goals for only one team: <b>1 point</b><br>
     Correct outcome (1-X-2): <b>1 point</b><br>
   </p>
-  <div id="matchesForm" class="container">
     <form method="POST" action="/quiz/matches">
-      <table class="table table-striped">
+      <table class="ui fixed table">
         <tbody>
           {{#each matches}}
             <tr>
@@ -28,23 +19,31 @@
                   {{this.location}} <br>
               </td>
               <td>
-                  <img src="/public/images/flags/{{parseImgFileName this.homeTeam}}" height="20" width="40">
-              </td>
-              <td>{{this.homeTeam}}
-                  <input class="form-control" name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals" required>
-              </td>
-              <td>{{this.awayTeam}}
-                  <input class="form-control" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals" required>
+                <img src="/public/images/flags/{{parseImgFileName this.homeTeam}}" height="20" width="40">
+                <div class="ui input label">
+                  {{this.homeTeam}}
+                </div>
+                <div class="ui input focus" style="float:right;">
+                  <input name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals" required>
+                </div>
               </td>
               <td>
-                  <img src="/public/images/flags/{{parseImgFileName this.awayTeam}}" height="20" width="40">
+                <img src="/public/images/flags/{{parseImgFileName this.awayTeam}}" height="20" width="40">
+                <div class="ui input label">
+                  {{this.awayTeam}}
+                </div>
+                <div class="ui input focus" style="float:right;">
+                  <input class="ui input focus" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals" required>
+                </div>
+
               </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
-      <button type="submit" class="btn btn-primary">Submit your answers</button>
+      <button type="submit" class="ui basic positive huge button">Submit your answers</button>
+      <br><br><br><br>
     </form>
-
-  </div>
 </div>
+
+

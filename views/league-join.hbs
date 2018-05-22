@@ -1,12 +1,21 @@
 {{> header }}
 
-{{#if notFound}}
-    <div class="alert alert-danger container">
-      {{this.notFound}}
-    </div>
-{{/if}}
-
-<div class="container">
+<div class="ui container">
+	{{#if notFound}}
+	    <div class="ui negative message">
+		<div class="header">
+		  {{this.notFound}}
+		</div>
+		</div>
+	{{/if}}
+	{{#if messages.error}}
+		<div class="ui negative message">
+		<div class="header">
+		  {{messages.error}}
+		</div>
+		</div>
+	{{/if}}
+	
 	<h1>Join a league</h1>
 	<p>Insert name and password for your league.</p>
 	<form method="POST" action="/league/join" class="ui form">

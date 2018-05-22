@@ -8,6 +8,12 @@ const League = {
   addUserToLeague: (user_id, league_id, callback) => {
     return db.query(Queries.addUserToLeague, [user_id, league_id], callback);
   },
+  userIsPartOfLeague: (user_id, league_id, callback) => {
+    return db.query(Queries.userIsPartOfLeague, [user_id, league_id], callback);
+  },
+  userIsPartOfAnyLeague: (user_id, callback) => {
+    return db.query(Queries.userIsPartOfAnyLeague, [user_id], callback);
+  },
   getLeagueByNameAndPassword: (name, password, callback) => {
     return db.query(Queries.getLeagueByNameAndPassword, [name, password], callback);
   },
