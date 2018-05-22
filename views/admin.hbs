@@ -1,0 +1,16 @@
+{{> header}}
+
+<div class="ui container">
+	<h1>Admin pages</h1>
+	{{#if messages.update}}
+		<div class="ui positive message">
+		<div class="header">
+		  {{messages.update}}
+		</div>
+		</div>
+	{{/if}}
+	<div class="ui list">
+		<div class="item"><a href="/admin/matches" style="color:#20B2AA;">Set official match results</a></div>
+		<div class="item"><a href="/admin/questions" style="color:#20B2AA;">Set official answers to questions</a></div>
+	</div>
+</div>

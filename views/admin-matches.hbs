@@ -1,0 +1,39 @@
+{{> header}}
+
+<div class="ui container">
+	<h1>Official match results</h1>
+	<form method="POST" action="/admin/matches">
+      <table class="ui fixed table">
+        <tbody>
+          {{#each matches}}
+            <tr>
+              <td>{{this.date}} <br>
+                  {{this.groupNumber}} <br>
+                  {{this.location}} <br>
+              </td>
+              <td>
+                <img src="/public/images/flags/{{parseImgFileName this.homeTeam}}" height="20" width="40">
+                <div class="ui input label">
+                  {{this.homeTeam}}
+                </div>
+                <div class="ui input focus" style="float:right;">
+                  <input name="{{addOne @index}}-homeGoals" type='number' min='0' placeholder="Goals">
+                </div>
+              </td>
+              <td>
+                <img src="/public/images/flags/{{parseImgFileName this.awayTeam}}" height="20" width="40">
+                <div class="ui input label">
+                  {{this.awayTeam}}
+                </div>
+                <div class="ui input focus" style="float:right;">
+                  <input class="ui input focus" name="{{addOne @index}}-awayGoals" type='number' min='0' placeholder="Goals">
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <button type="submit" class="ui basic positive huge button">Set official match results</button>
+      <br><br><br><br>
+    </form>
+</div>

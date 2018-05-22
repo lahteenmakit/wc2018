@@ -4,6 +4,7 @@ const expressValidator = require('express-validator');
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const moment = require('moment');
 
 const db = require('../dbconnection');
 const Queries = require('../models/Queries.js');
@@ -13,6 +14,8 @@ const League = require('../models/League.js');
 const Match = require('../models/Match.js');
 const Team = require('../models/Team.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
+
+var points = require('../controllers/points.js')
 
 router.get('/', (req, res, next) => {
   req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
@@ -322,6 +325,62 @@ function accessToLeague() {
     }
   }
 }
+
+router.get('/admin', (req, res, next) => {
+
+  res.render('admin');
+});
+
+router.get('/admin/matches', (req, res, next) => {
+    Match.getGroupStageMatches((err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      var matchesToShow = rows.filter((element) => {
+        var today = moment('17/06/2018 12:00', 'DD/MM/YYYY hh:mm');
+        var matchDate = moment(element.date, 'DD/MM/YYYY hh:mm');
+        return element.matchEnded == 0 && today.diff(matchDate, 'hours') > 0;
+      });
+      res.render('admin-matches', {
+        matches: matchesToShow
+      });
+    }
+  });
+});
+
+router.post('/admin/matches', (req, res, next) => {
+  var success = '', error = '';
+  var results = req.body;
+  for(var i in results) {
+    if(i.includes('homeGoals')) {
+      var match = {};
+      match['matchNumber'] = i.split('-')[0];
+      match['homeGoals'] = results[i];
+    } else {
+      match['awayGoals'] = results[i];
+      Match.setOfficialMatchResult(match.homeGoals, match.awayGoals, match.matchNumber, (err, rows) => {
+        if (err) {
+            error += err;
+        } else {
+            success += rows;
+        }
+      });
+    }
+  }
+  if(error != '') {
+    res.json(error)
+  }
+  else {
+    points.addPoints();
+    req.flash('update', 'Updated official match results');
+    res.redirect('/admin');
+  }
+});  
+
+router.get('/admin/questions', (req, res, next) => {
+  
+  res.render('admin-questions');
+});
 
 
 router.get('/login', (req, res, next) => {

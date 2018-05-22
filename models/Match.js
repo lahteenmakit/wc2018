@@ -11,6 +11,13 @@ const Match = {
   getUserAnswersForMatches: (user_id, callback) => {
     return db.query(Queries.getUserAnswersForMatches, [user_id], callback);
   },
+  getNewOfficialResultsAndUserAnswers: (callback) => {
+    return db.query(Queries.getNewOfficialResultsAndUserAnswers, callback);
+  },
+  setOfficialMatchResult: (homeGoals, awayGoals, matchNumber, callback) => {
+    var matchEnded = 1;
+    return db.query(Queries.setOfficialMatchResult, [homeGoals, awayGoals, matchEnded, matchNumber], callback);
+  },
   setMatchResultForUser: (homeGoals, awayGoals, user_id, matchNumber, callback) => {
     var matchEnded = (user_id == 1) ? 1 : 0;
     console.log(user_id + "   " + matchEnded)
