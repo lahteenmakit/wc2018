@@ -40,7 +40,6 @@ app.use('/public', express.static(__dirname + '/public'));
 app.use(flash());
 
 const options = config.db;
-
 var sessionStore = new MySQLStore(options);
 
 app.use(session({
