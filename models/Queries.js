@@ -13,6 +13,21 @@ const Queries = {
   createLeague: "INSERT INTO leagues (name, password) VALUES (?, ?);",
   addUserToLeague: "INSERT INTO users_leagues (user_id, league_id) VALUES (?, ?);",
   getLeagueByNameAndPassword: "SELECT * FROM leagues WHERE name=? AND password=?;",
+  getLeaguesByUser: `SELECT users_leagues.user_id, users_leagues.league_id, leagues.name
+                     FROM users_leagues
+                     INNER JOIN leagues
+                     ON users_leagues.league_id=leagues.league_id
+                     AND users_leagues.user_id = ?
+                     ORDER BY leagues.name ASC;`,
+  getUsersInLeague: `SELECT users_leagues.user_id, users_leagues.league_id, users.username, users.points, leagues.name AS league_name
+                      FROM users_leagues
+                      INNER JOIN users
+                      ON users_leagues.user_id=users.user_id
+                      AND league_id=?
+                      INNER JOIN leagues
+                      ON users_leagues.league_id=leagues.league_id
+                      ORDER BY users.points DESC;`,
+  userIsPartOfLeague: "",
 
   /**MATCHES**/
   getAllMatches: "SELECT * FROM matches;",

@@ -1,0 +1,13 @@
+{{> header }}
+
+<div class="container">
+	<h1>My Leagues</h1>
+	<div class="ui list">
+	{{#each leagues}}
+		<div class="item"><a href="/leagues/{{this.league_id}}">{{this.name}}</a></div>
+	{{/each}}
+	<br>
+	<div class="item"><a href="/league/join" style="color:#20B2AA;">Join a league</a></div>
+	<div class="item"><a href="/league/create" style="color:#20B2AA;">Create new league</a></div>
+	</div>
+</div>

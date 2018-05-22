@@ -10,7 +10,13 @@ const League = {
   },
   getLeagueByNameAndPassword: (name, password, callback) => {
     return db.query(Queries.getLeagueByNameAndPassword, [name, password], callback);
-  }
+  },
+  getLeaguesByUser: (user_id, callback) => {
+  	return db.query(Queries. getLeaguesByUser, [user_id], callback);
+  },
+  getUsersInLeague: (league_id, callback) => {
+  	return db.query(Queries. getUsersInLeague, [league_id], callback);
+  },
 };
 
 module.exports = League;

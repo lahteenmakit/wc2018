@@ -258,9 +258,27 @@ router.post('/league/create', (req, res, next) => {
   });
 });
 
+router.get('/league/my', (req, res, next) => {
+  League.getLeaguesByUser(req.user.user_id, (err, rows) => {
+    if(err) throw err;
+    else {
+      res.render('league-my', {
+        leagues: rows
+      });
+    }
+  });
+});
+
 router.get('/leagues/:id', (req, res, next) => {
-  
-  res.render('league', {title: 'League'});
+  League.getUsersInLeague(req.params.id, (err, rows) => {
+    console.log(rows)
+    if(err) throw err;
+    else {
+      res.render('league', {
+        usersInLeague: rows
+      });
+    }
+  });
 });
 
 
