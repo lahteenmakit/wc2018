@@ -24,7 +24,7 @@
 			<tbody>
 				{{#each usersInLeague}}
 					<tr>
-						<td class="collapsing">{{addOne @index}}</td>	
+						<td class="collapsing">{{getRank @index}}</td>	
 						<td>{{this.username}}</td>
 						<td>{{this.points}}</td>
 					</tr>
