@@ -301,7 +301,6 @@ router.get('/league/my', (req, res, next) => {
 
 router.get('/leagues/:id', accessToLeague(), (req, res, next) => {
   League.getUsersInLeague(req.params.id, (err, rows) => {
-    console.log(rows)
     if(err) throw err;
     else {
       res.render('league', {
@@ -314,12 +313,10 @@ router.get('/leagues/:id', accessToLeague(), (req, res, next) => {
 function accessToLeague() {
   return (req, res, next) => {
     if(req.isAuthenticated()) {
-      console.log(req.params.id)
       League.userIsPartOfLeague(req.user.user_id, req.params.id, (err, rows) => {
         if(err) throw err;
         else {
           var accessToLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;
-          console.log(accessToLeague)
           if(!accessToLeague) {
             req.flash('error','You do not have access to this league. If you know the league password, go to My Leagues and join it.');
             res.redirect('/');
