@@ -54,6 +54,8 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
+  if(req.user)
+    res.locals.isAdmin = req.user.user_id == 1 ? true : false;
   next();
 });
 

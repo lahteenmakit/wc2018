@@ -34,9 +34,11 @@
             Take the Quiz
           </a>
           <div class="right menu">
+            {{#if isAdmin}}
             <a class="item" href="/admin">
               Admin
             </a>
+            {{/if}}
             <a class="item" href="/logout">
               Logout
             </a>

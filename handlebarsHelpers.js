@@ -4,6 +4,10 @@ hbs.registerHelper('addOne', (value, options) => {
   return parseInt(value) + 1;
 });
 
+hbs.registerHelper('isOne', (value, options) => {
+  return parseInt(value) == 1 ? true : false;
+});
+
 hbs.registerHelper('getRank', (value, options) => {
 	var suffix = '';
 	var number = parseInt(value) + 1;

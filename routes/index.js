@@ -22,6 +22,16 @@ router.get('/', (req, res, next) => {
   res.render('home', {title: 'Home'});
 });
 
+function userIsAdmin() {
+  return (req, res, next) => {
+    if(!req.isAuthenticated())
+      res.redirect('/login');
+    else if(req.user.user_id == 1)
+      return next();
+    res.redirect('/');
+  }
+}
+
 router.get('/quiz/start', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
   League.userIsPartOfAnyLeague(req.user.user_id, (err, rows) => {
     if(err) throw err;
@@ -308,7 +318,6 @@ function accessToLeague() {
       League.userIsPartOfLeague(req.user.user_id, req.params.id, (err, rows) => {
         if(err) throw err;
         else {
-          console.log(rows)
           var accessToLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;
           console.log(accessToLeague)
           if(!accessToLeague) {
@@ -326,18 +335,18 @@ function accessToLeague() {
   }
 }
 
-router.get('/admin', (req, res, next) => {
+router.get('/admin', userIsAdmin(), (req, res, next) => {
 
   res.render('admin');
 });
 
-router.get('/admin/matches', (req, res, next) => {
+router.get('/admin/matches', userIsAdmin(), (req, res, next) => {
     Match.getGroupStageMatches((err, rows) => {
     if (err) {
       res.json(err);
     } else {
       var matchesToShow = rows.filter((element) => {
-        var today = moment('17/06/2018 12:00', 'DD/MM/YYYY hh:mm');
+        var today = moment();
         var matchDate = moment(element.date, 'DD/MM/YYYY hh:mm');
         return element.matchEnded == 0 && today.diff(matchDate, 'hours') > 0;
       });
@@ -348,7 +357,7 @@ router.get('/admin/matches', (req, res, next) => {
   });
 });
 
-router.post('/admin/matches', (req, res, next) => {
+router.post('/admin/matches', userIsAdmin(), (req, res, next) => {
   var success = '', error = '';
   var results = req.body;
   for(var i in results) {
@@ -377,7 +386,7 @@ router.post('/admin/matches', (req, res, next) => {
   }
 });  
 
-router.get('/admin/questions', (req, res, next) => {
+router.get('/admin/questions', userIsAdmin(), (req, res, next) => {
   
   res.render('admin-questions');
 });
