@@ -16,15 +16,16 @@ require('dotenv').config();
 const config = require('./config');
 const db = require('./dbconnection');
 
-const Match = require('./models/Match.js');
-const Team = require('./models/Team.js');
-
 const exphbs  = require('express-handlebars');
 const hbs = require('handlebars');
 const hbsHelpers = require('./handlebarsHelpers.js')
 const fs = require('fs');
 
-const index = require('./routes/index.js');
+const index = require('./routes/index');
+const profile = require('./routes/profile');
+const quiz = require('./routes/quiz');
+const league = require('./routes/league');
+const admin = require('./routes/admin');
 
 const app = express();
 
@@ -60,6 +61,16 @@ app.use((req, res, next) => {
 });
 
 app.use('/', index);
+app.use('/profile', profile);
+app.use('/quiz/', quiz);
+app.use('/league/', league);
+app.use('/admin/', admin);
+
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 passport.use(new LocalStrategy((username, password, done) => {
   db.query('select user_id,password from users where username=?', [username], (err, results, fields) => {
@@ -80,12 +91,6 @@ passport.use(new LocalStrategy((username, password, done) => {
   });
   }
 ));
-
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
 
 const partialsDir = __dirname + '/views/partials';
 

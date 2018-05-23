@@ -1,4 +1,4 @@
-const Match = require('../models/Match.js');
+/*const Match = require('../models/Match.js');
 
 const pointSystem = {
 	'goalsCorrectForOneTeam': 2,
@@ -18,4 +18,4 @@ module.exports.addPoints = function() {
 			}
 		}
 	});
-}
+}*/
