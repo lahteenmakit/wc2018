@@ -14,6 +14,15 @@ const QuestionAnswer = {
   getExtraQuestions: (callback) => {
     return db.query(Queries.getExtraQuestions, callback)
   },
+  getNewOfficialStandingsAndUserAnswers: (callback) => {
+    return db.query(Queries.getNewOfficialStandingsAndUserAnswers, callback)
+  },
+  getNewOfficialScorersAndUserAnswers: (callback) => {
+    return db.query(Queries.getNewOfficialScorersAndUserAnswers, callback)
+  },
+  getNewOfficialExtrasAndUserAnswers: (callback) => {
+    return db.query(Queries.getNewOfficialExtrasAndUserAnswers, callback)
+  },
   setAnswerByUser: (userId, category, answer, callback) => {
     return db.query(Queries.setAnswerByUser, [answer, category, userId], callback)
   },

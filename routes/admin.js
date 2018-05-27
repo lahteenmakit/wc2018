@@ -8,6 +8,7 @@ const League = require('../models/League.js');
 const Match = require('../models/Match.js');
 const Team = require('../models/Team.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
+const pointSystem = require('../pointSystem.js');
 
 function userIsAdmin() {
   return (req, res, next) => {
@@ -63,8 +64,29 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
     res.json(error)
   }
   else {
-    req.flash('update', 'Updated official match results');
-    res.redirect('/admin');
+    Match.getNewOfficialResultsAndUserAnswers((err, rows) => {
+      if(err) throw err;
+      else {
+        rows.forEach(element => {
+          var points = 0;
+          if(element.official_hg == element.user_hg)
+            points += pointSystem.goalsCorrectForOneTeam;
+          if(element.official_ag == element.user_ag)
+            points += pointSystem.goalsCorrectForOneTeam;
+          if(element.official_hg > element.official_ag && element.user_hg > element.user_ag)
+            points += pointSystem.outcomeCorrect;
+          if(element.official_hg == element.official_ag && element.user_hg == element.user_ag)
+            points += pointSystem.outcomeCorrect;
+          if(element.official_hg < element.official_ag && element.user_hg < element.user_ag)
+            points += pointSystem.outcomeCorrect;
+          User.addPoints(points, element.user_id, (err, rows) => {
+            if(err) throw err;
+          });
+        });
+        req.flash('update', 'Updated official match results');
+        res.redirect('/admin');
+      }
+    });
   }
 });  
 
@@ -85,33 +107,41 @@ router.post('/standings', userIsAdmin(), (req, res, next) => {
   var success = '', error = '';
   for(var i in answers) {
     var category = i; 
-    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
-      if (err) {
-          error += err;
-      } else {
-          success += rows;
-      }
+    console.log(category + " " + answers[i])
+    QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
+      if (err) throw err;
     });
   }
-  if(error != '') {
-    res.json(error)
-  }
-  else {
+  QuestionAnswer.getNewOfficialStandingsAndUserAnswers((err, rows) => {
+    if(err) throw err;
+    else {
+      var standingsArray = [rows[0].official_answer, rows[1].official_answer, rows[2].official_answer];
+      rows.forEach(element => {
+        var points = 0;
+        if(element.official_answer == element.user_answer)
+          points += pointSystem.teamAndPlaceCorrect;
+        else if(standingsArray.includes(element.user_answer))
+          points += pointSystem.onlyTeamCorrect;
+        User.addPoints(points, element.user_id, (err, rows) => {
+          if(err) throw err;
+        });  
+      }); 
     req.flash('update', 'Updated official standings');
     res.redirect('/admin');
-  }
+    } 
+  }); 
 });
 
 router.get('/scorers', userIsAdmin(), (req, res, next) => {
   res.render('admin-scorers');
 });
 
-router.post('/scorers', (req, res, next) => {
+router.post('/scorers', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
     var category = i; 
-    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
+    QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {
           error += err;
       } else {
@@ -123,8 +153,24 @@ router.post('/scorers', (req, res, next) => {
     res.json(error)
   }
   else {
-    req.flash('update', 'Updated official top scorer');
-    res.redirect('/admin');
+    QuestionAnswer.getNewOfficialScorersAndUserAnswers((err, rows) => {
+      if(err) throw err;
+      else {
+        rows.forEach((element, index, array) => {
+          var points = 0;
+          if(element.official_answer == element.user_answer && element.official_cat == 'scorers_topScorer') {
+              points += pointSystem.playerCorrect;
+              if(array[index+1].official_answer == array[index+1].user_answer)
+                points += pointSystem.goalsCorrect;                           
+          }
+          User.addPoints(points, element.user_id, (err, rows) => {
+            if(err) throw err;
+          }); 
+        });
+      req.flash('update', 'Updated official top scorer');
+      res.redirect('/admin');
+      }
+    })
   }
 });
 
@@ -140,12 +186,12 @@ router.get('/extras', userIsAdmin(), (req, res, next) => {
   });
 });
 
-router.post('/extras', (req, res, next) => {
+router.post('/extras', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
     var category = i; 
-    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
+    QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {
           error += err;
       } else {
@@ -157,8 +203,22 @@ router.post('/extras', (req, res, next) => {
     res.json(error)
   }
   else {
-    req.flash('update', 'Updated official extra question answers');
-    res.redirect('/admin');
+    QuestionAnswer.getNewOfficialExtrasAndUserAnswers((err, rows) => {
+      if(err) throw err;
+      else {
+        rows.forEach(element => {
+          var points = 0;
+          if(element.official_answer == element.user_answer) 
+            points += pointSystem.extraQuestionCorrect;
+            User.addPoints(points, element.user_id, (err, rows) => {
+            if(err) throw err;
+          }); 
+        });
+        req.flash('update', 'Updated official extra question answers');
+        res.redirect('/admin');
+      }
+    });
+    
   }
 });
 

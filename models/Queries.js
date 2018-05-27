@@ -63,6 +63,21 @@ const Queries = {
   getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
   getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
+  getNewOfficialStandingsAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
+                                  FROM questionsAndAnswers_base
+                                  INNER JOIN questionsAndAnswers
+                                  ON questionsAndAnswers_base.category=questionsAndAnswers.category
+                                  AND questionsAndAnswers_base.category REGEXP 'standings*';`,
+  getNewOfficialScorersAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
+                                        FROM questionsAndAnswers_base
+                                        INNER JOIN questionsAndAnswers
+                                        ON questionsAndAnswers_base.category=questionsAndAnswers.category
+                                        AND questionsAndAnswers_base.category REGEXP 'scorers*';`,
+  getNewOfficialExtrasAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
+                                        FROM questionsAndAnswers_base
+                                        INNER JOIN questionsAndAnswers
+                                        ON questionsAndAnswers_base.category=questionsAndAnswers.category
+                                        AND questionsAndAnswers_base.category REGEXP 'extras*';`,                                                                      
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?;",
