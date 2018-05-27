@@ -5,6 +5,7 @@ const User = require('../models/User.js');
 const League = require('../models/League.js');
 const Match = require('../models/Match.js');
 const Team = require('../models/Team.js');
+const Player = require('../models/Player.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
 
 router.get('/start', getQuizDone(), authenticationMiddleware(), (req, res, next) => {

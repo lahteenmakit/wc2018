@@ -17,6 +17,9 @@ const QuestionAnswer = {
   setAnswerByUser: (userId, category, answer, callback) => {
     return db.query(Queries.setAnswerByUser, [answer, category, userId], callback)
   },
+  setOfficialAnswers: (answer, category, callback) => {
+    return db.query(Queries.setOfficialAnswers, [answer, category], callback)
+  },
   userHasAnsweredQuestions: (userId, callback) => {
     return db.query(Queries.userHasAnsweredQuestions, [userId], callback)
   }

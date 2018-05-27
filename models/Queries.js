@@ -56,12 +56,16 @@ const Queries = {
                 AND matches.user_id=1
                 ORDER BY matches.homeTeam ASC;`,
 
+  /**PLAYERS**/
+  getAllPlayers: "SELECT * FROM players;",
+
   /**QUESTIONS AND ANSWERS**/
   getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
   getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
-  userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?",
+  setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
+  userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?;",
   insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer) " +
                            "SELECT ?, category, question, questionType, answer " +
                            "FROM questionsAndAnswers_base;"

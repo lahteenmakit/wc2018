@@ -30,3 +30,15 @@ hbs.registerHelper('getRank', (value, options) => {
 hbs.registerHelper('parseImgFileName', (value, options) => {
   return value.toLowerCase() + '.png';
 });
+
+var PLAYER_OPT_GROUP = '';
+
+hbs.registerHelper('newOptGroup', (currentValue) => {
+	console.log(PLAYER_OPT_GROUP)
+	console.log(currentValue)
+	if(PLAYER_OPT_GROUP != currentValue) {
+		PLAYER_OPT_GROUP = currentValue;
+		return true;
+	}
+	return false;
+});

@@ -1,10 +1,8 @@
 {{> header}}
 
 <div class="ui container">
-  <h1>Extra Questions</h1>
-  <p>Guess the answers to the following questions.</p>
-  <p>Points: <b> One point for each correct answer </b></p>
-    <form method="POST" action="/quiz/extras" class="ui form">
+	<h1>Official answers to extras questions</h1>
+    <form method="POST" action="/admin/extras" class="ui form">
       {{#each questions}}
       <div class="field">
         <label>{{this.question}}</label>
@@ -13,4 +11,5 @@
       {{/each}}
       <button type="submit" class="ui basic positive huge button">Submit your answers</button>
     </form>
+
 </div>

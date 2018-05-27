@@ -1,0 +1,41 @@
+{{> header}}
+
+<div class="ui container">
+	<h1>Official answers</h1>
+	<form method="POST" action="/admin/standings">
+      <table class="ui table">
+        <tr>
+          <td>Champion</td>
+          <td>
+            <select name="standings_champion" class="ui fluid search dropdown">
+              {{#each teams}}
+                <option value="{{this.team}}">{{this.team}}</option>
+              {{/each}} 
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Runner-up</td>
+          <td>
+            <select name="standings_runnerUp" class="ui fluid search dropdown">
+              {{#each teams}}
+                <option value="{{this.team}}">{{this.team}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>3rd place</td>
+          <td>
+            <select name="standings_thirdPlace" class="ui fluid search dropdown">
+              {{#each teams}}
+                <option value="{{this.team}}">{{this.team}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
+      </table>
+      <button type="submit" class="ui basic positive huge button">Submit official standings</button>
+    </form>
+
+</div>

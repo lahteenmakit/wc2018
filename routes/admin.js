@@ -63,15 +63,103 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
     res.json(error)
   }
   else {
-    //points.addPoints();
     req.flash('update', 'Updated official match results');
     res.redirect('/admin');
   }
 });  
 
-router.get('/questions', userIsAdmin(), (req, res, next) => {
-  
-  res.render('admin-questions');
+router.get('/standings', userIsAdmin(), (req, res, next) => {
+  Team.getAllTeams( (err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.render('admin-standings', {
+        teams: rows
+      });
+    }
+  });
+});
+
+router.post('/standings', userIsAdmin(), (req, res, next) => {
+  var answers = req.body;
+  var success = '', error = '';
+  for(var i in answers) {
+    var category = i; 
+    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
+      if (err) {
+          error += err;
+      } else {
+          success += rows;
+      }
+    });
+  }
+  if(error != '') {
+    res.json(error)
+  }
+  else {
+    req.flash('update', 'Updated official standings');
+    res.redirect('/admin');
+  }
+});
+
+router.get('/scorers', userIsAdmin(), (req, res, next) => {
+  res.render('admin-scorers');
+});
+
+router.post('/scorers', (req, res, next) => {
+  var answers = req.body;
+  var success = '', error = '';
+  for(var i in answers) {
+    var category = i; 
+    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
+      if (err) {
+          error += err;
+      } else {
+          success += rows;
+      }
+    });
+  }
+  if(error != '') {
+    res.json(error)
+  }
+  else {
+    req.flash('update', 'Updated official top scorer');
+    res.redirect('/admin');
+  }
+});
+
+router.get('/extras', userIsAdmin(), (req, res, next) => {
+  QuestionAnswer.getExtraQuestions((err, rows) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.render('admin-extras', {
+        questions: rows
+      });
+    }
+  });
+});
+
+router.post('/extras', (req, res, next) => {
+  var answers = req.body;
+  var success = '', error = '';
+  for(var i in answers) {
+    var category = i; 
+    QuestionAnswer.setOfficialAnswers(category, answers[i], (err, rows) => {
+      if (err) {
+          error += err;
+      } else {
+          success += rows;
+      }
+    });
+  }
+  if(error != '') {
+    res.json(error)
+  }
+  else {
+    req.flash('update', 'Updated official extra question answers');
+    res.redirect('/admin');
+  }
 });
 
 module.exports = router;
