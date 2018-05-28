@@ -2,6 +2,9 @@ const db = require('../dbconnection');
 const Queries = require('./Queries.js');
 
 const QuestionAnswer = {
+  addUserPointsForQuestion: (points, user_id, category, callback) => {
+    return db.query(Queries.addUserPointsForQuestion, [points, user_id, category], callback);
+  },
   insertQuestionsForUsers: (userId, callback) => {
     return db.query(Queries.insertQuestionsForUsers, [userId], callback)
   },

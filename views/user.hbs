@@ -1,0 +1,62 @@
+{{> header }}
+
+
+{{#tournamentNotStarted}}
+<h1>Not started</h1>
+{{else}}
+<div class="ui stackable two column very relaxed grid container">
+  <div class="row">
+    <div class="column">
+      <div class="ui segment">
+				<div id="ui" class="ui card">
+				  <div class="image">
+				    <img src="/public/images/person_avatar_placeholder.png">
+				  </div>
+				  <div class="content">
+				    <p class="header">User <i>{{this.username}}</i></p>
+				  </div>
+				  <div class="extra content">
+				    Points: {{this.points}}
+				  </div>
+				</div>
+			</div>
+			<div class="ui segment">
+				<h1>Answers</h1>
+					<table class="ui celled table">
+						<tbody>
+							{{#each answers}}
+								<tr>
+									<td>{{this.question}}</td>
+									<td>{{this.answer}}</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+			</div>
+    </div>
+    <div class="column">
+      <div class="ui segment">
+				<h1>Match results</h1>
+				<table class="ui celled table">
+			    <tbody>
+						{{#each matches}}
+							<tr>
+								<td>{{this.homeTeam}}</td>
+								<td> vs. </td>
+								<td>{{this.awayTeam}}</td>
+								<td>{{this.homeGoals}} - {{this.awayGoals}}</td>
+							</tr>
+						{{/each}}
+			    </tbody>
+			  </table>
+			</div>
+    </div>
+  </div>
+</div>
+
+{{/tournamentNotStarted}}
+
+
+
+
+

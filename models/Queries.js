@@ -31,6 +31,7 @@ const Queries = {
   userIsPartOfAnyLeague: "SELECT COUNT(user_id) FROM users_leagues WHERE user_id=?;",
 
   /**MATCHES**/
+  addUserPointsForMatch: "UPDATE matches SET points=points+? WHERE user_id=? AND matchNumber=?;",
   getAllMatches: "SELECT * FROM matches;",
   getGroupStageMatches: "SELECT * FROM matches_base WHERE stage='group';",
   setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=? WHERE user_id=? AND matchNumber=?;",
@@ -44,8 +45,7 @@ const Queries = {
                                         FROM matches_base
                                         INNER JOIN matches
                                         ON matches_base.matchNumber=matches.matchNumber
-                                        AND matches_base.matchEnded=1
-                                        AND matches.matchEnded=0;`,
+                                        AND matches_base.matchEnded=1`,
                                         
 
   /**TEAMS**/
@@ -60,6 +60,7 @@ const Queries = {
   getAllPlayers: "SELECT * FROM players;",
 
   /**QUESTIONS AND ANSWERS**/
+  addUserPointsForQuestion: "UPDATE questionsAndAnswers SET points=points+? WHERE user_id=? AND category=?;",
   getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
   getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",

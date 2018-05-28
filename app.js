@@ -26,6 +26,8 @@ const profile = require('./routes/profile');
 const quiz = require('./routes/quiz');
 const league = require('./routes/league');
 const admin = require('./routes/admin');
+const user = require('./routes/user');
+
 
 const app = express();
 
@@ -65,6 +67,8 @@ app.use('/profile', profile);
 app.use('/quiz/', quiz);
 app.use('/league/', league);
 app.use('/admin/', admin);
+app.use('/user/', user);
+
 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

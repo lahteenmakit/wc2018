@@ -81,6 +81,9 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
             points += pointSystem.outcomeCorrect;
           User.addPoints(points, element.user_id, (err, rows) => {
             if(err) throw err;
+            Match.addUserPointsForMatch(points, element.user_id, element.official_mn, (err, rows) => {
+              if(err) throw err;
+            });
           });
         });
         req.flash('update', 'Updated official match results');
@@ -124,6 +127,9 @@ router.post('/standings', userIsAdmin(), (req, res, next) => {
           points += pointSystem.onlyTeamCorrect;
         User.addPoints(points, element.user_id, (err, rows) => {
           if(err) throw err;
+          QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
+              if(err) throw err;
+          });
         });  
       }); 
     req.flash('update', 'Updated official standings');
@@ -165,6 +171,9 @@ router.post('/scorers', userIsAdmin(), (req, res, next) => {
           }
           User.addPoints(points, element.user_id, (err, rows) => {
             if(err) throw err;
+            QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
+              if(err) throw err;
+            });
           }); 
         });
       req.flash('update', 'Updated official top scorer');
@@ -211,7 +220,10 @@ router.post('/extras', userIsAdmin(), (req, res, next) => {
           if(element.official_answer == element.user_answer) 
             points += pointSystem.extraQuestionCorrect;
             User.addPoints(points, element.user_id, (err, rows) => {
-            if(err) throw err;
+              if(err) throw err;
+              QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
+                if(err) throw err;
+              });
           }); 
         });
         req.flash('update', 'Updated official extra question answers');

@@ -4,6 +4,10 @@ const router = express.Router();
 const db = require('../dbconnection');
 
 const League = require('../models/League.js');
+const User = require('../models/User.js');
+const Match = require('../models/Match.js');
+const Team = require('../models/Team.js');
+const QuestionAnswer = require('../models/QuestionAnswer.js');
 
 function accessToLeague() {
   return (req, res, next) => {
@@ -26,6 +30,15 @@ function accessToLeague() {
     }
   }
 }
+
+function authenticationMiddleware() {
+  return (req, res, next) => {
+    if (req.isAuthenticated())
+      return next();
+    res.redirect('/login')
+  }
+}
+
 
 router.get('/join', (req, res, next) => {
   res.render('league-join');
@@ -107,5 +120,44 @@ router.get('/:id', accessToLeague(), (req, res, next) => {
     }
   });
 });
+
+router.get('/:id/user/:user_id', accessToLeague(), authenticationMiddleware(), (req, res, next) => {
+  User.getUsernameById(req.params.user_id, (err, rows) => {
+    if(err) {
+      res.json(err);
+    } else {
+      var username = rows[0].username;
+      User.getPoints(req.params.user_id, (err, rows) => {
+        if(err) {
+          res.json(err);
+        } else {
+          var points = rows[0].points;
+          Match.getUserAnswersForMatches(req.params.user_id, (err, rows) => {
+            if(err) {
+              res.json(err);
+            } else {
+              var matches = rows;
+              //quizDone? 
+              QuestionAnswer.getAnswersByUser(req.params.user_id, (err, rows) => {
+                if(err) {
+                  res.json(err);
+                } else {
+                  var answers = rows;
+                  res.render('user', {
+                    username: username,
+                    points: points,
+                    matches: matches,
+                    answers: answers
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 
 module.exports = router;

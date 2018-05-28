@@ -48,6 +48,7 @@ CREATE TABLE questionsAndAnswers (
 	question VARCHAR(100),
 	questionType VARCHAR(40),
 	answer VARCHAR(20),
+	points INT DEFAULT 0,
 	PRIMARY KEY(id)
 );
 
@@ -61,9 +62,10 @@ CREATE TABLE matches (
 	homeTeam VARCHAR(30),
 	awayTeam VARCHAR(30),
 	groupNumber VARCHAR(10),
-	homeGoals INT DEFAULT(0),
-	awayGoals INT DEFAULT(0),
-	matchEnded INT DEFAULT(0),
+	homeGoals INT DEFAULT 0,
+	awayGoals INT DEFAULT 0,
+	matchEnded INT DEFAULT 0,
+	points INT DEFAULT 0,
 	PRIMARY KEY(id)
 );
 

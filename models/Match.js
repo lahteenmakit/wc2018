@@ -2,6 +2,9 @@ const db = require('../dbconnection');
 const Queries = require('./Queries.js');
 
 const Match = {
+  addUserPointsForMatch: (points, user_id, matchNumber, callback) => {
+    return db.query(Queries.addUserPointsForMatch, [points, user_id, matchNumber], callback);
+  },
   getAllMatches: (callback) => {
     return db.query(Queries.getAllMatches, callback);
   },

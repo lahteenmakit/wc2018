@@ -1,4 +1,5 @@
 const hbs = require('handlebars');
+const moment = require('moment');
 
 hbs.registerHelper('addOne', (value, options) => {
   return parseInt(value) + 1;
@@ -29,6 +30,26 @@ hbs.registerHelper('getRank', (value, options) => {
 
 hbs.registerHelper('parseImgFileName', (value, options) => {
   return value.toLowerCase() + '.png';
+});
+
+hbs.registerHelper('tournamentStarted', (options) => {
+	var startDate = moment('14/06/2017', 'DD/MM/YYYY');
+	var today = moment();
+	if(today >= startDate) {
+		return options.fn(this);
+	}
+	else
+		return options.inverse(this);
+});
+
+hbs.registerHelper('tournamentNotStarted', (options) => {
+	var startDate = moment('14/06/2017', 'DD/MM/YYYY');
+	var today = moment();
+	if(today < startDate) {
+		return options.fn(this);
+	}
+	else
+		return options.inverse(this);
 });
 
 var PLAYER_OPT_GROUP = '';
