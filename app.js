@@ -28,6 +28,7 @@ const league = require('./routes/league');
 const admin = require('./routes/admin');
 const user = require('./routes/user');
 
+const User = require('./models/User.js');
 
 const app = express();
 

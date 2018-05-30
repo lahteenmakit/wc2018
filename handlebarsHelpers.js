@@ -9,6 +9,13 @@ hbs.registerHelper('isOne', (value, options) => {
   return parseInt(value) == 1 ? true : false;
 });
 
+hbs.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 hbs.registerHelper('getRank', (value, options) => {
 	var suffix = '';
 	var number = parseInt(value) + 1;

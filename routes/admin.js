@@ -6,6 +6,7 @@ const saltRounds = 10;
 const flash = require('express-flash');
 
 const moment = require('moment');
+const _ = require('lodash');
 
 const User = require('../models/User.js');
 const League = require('../models/League.js');
@@ -119,12 +120,12 @@ router.post('/standings', userIsAdmin(), (req, res, next) => {
   QuestionAnswer.getNewOfficialStandingsAndUserAnswers((err, rows) => {
     if(err) throw err;
     else {
-      var standingsArray = [rows[0].official_answer, rows[1].official_answer, rows[2].official_answer];
+      var official = _.uniq(_.map(rows, 'official_answer'));
       rows.forEach(element => {
         var points = 0;
         if(element.official_answer == element.user_answer)
           points += pointSystem.teamAndPlaceCorrect;
-        else if(standingsArray.includes(element.user_answer))
+        else if(official.includes(element.user_answer))
           points += pointSystem.onlyTeamCorrect;
         User.addPoints(points, element.user_id, (err, rows) => {
           if(err) throw err;
@@ -163,24 +164,33 @@ router.post('/scorers', userIsAdmin(), (req, res, next) => {
     QuestionAnswer.getNewOfficialScorersAndUserAnswers((err, rows) => {
       if(err) throw err;
       else {
-        rows.forEach((element, index, array) => {
+        var official = _.uniq(_.map(rows, 'official_answer'));
+        var scorers = _.chain(_.filter(rows, {'official_cat':'scorers_topScorer'})).keyBy('user_id').mapValues('user_answer').value();
+        var goals = _.chain(_.filter(rows, {'official_cat':'scorers_goals'})).keyBy('user_id').mapValues('user_answer').value();
+
+        for(id in scorers) {
+          console.log(id)
+          console.log(scorers[id])
+          console.log(goals[id])
           var points = 0;
-          if(element.official_answer == element.user_answer && element.official_cat == 'scorers_topScorer') {
-              points += pointSystem.playerCorrect;
-              if(array[index+1].official_answer == array[index+1].user_answer)
-                points += pointSystem.goalsCorrect;
+          if(scorers[id] == official[0]) {
+            points += pointSystem.playerCorrect;
+            if(goals[id] == official[1]) {
+              points += pointSystem.goalsCorrect;
+            }
+            console.log('User with id: ' + id + ' gets points: ' + points)
           }
-          User.addPoints(points, element.user_id, (err, rows) => {
+          /*User.addPoints(points, id, (err, rows) => {
             if(err) throw err;
-            QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
+            QuestionAnswer.addUserPointsForQuestion(points, id, 'scorers_topScorer' , (err, rows) => {
               if(err) throw err;
             });
-          });
-        });
+          });*/
+        }
       req.flash('update', 'Updated official top scorer');
       res.redirect('/admin');
       }
-    })
+    });
   }
 });
 

@@ -12,18 +12,28 @@
 				    <p class="header">User <i>{{this.username}}</i></p>
 				  </div>
 				  <div class="extra content">
-				    Points: {{this.points}}
+				    Total points: {{this.points}}
 				  </div>
 				</div>
 			</div>
 			<div class="ui segment">
 				<h1>My answers</h1>
 					<table class="ui celled table">
+            <thead>
+              <th>Question</th>
+              <th>Answer</th>
+              <th>Points</th>
+            </thead>
 						<tbody>
 							{{#each answers}}
 								<tr>
 									<td>{{this.question}}</td>
 									<td>{{this.answer}}</td>
+                  {{#ifCond this.pointsGiven 1}}
+                    <td>{{this.points}}</td>
+                  {{else}}
+                    <td>N/A</td>
+                  {{/ifCond}}
 								</tr>
 							{{/each}}
 						</tbody>
@@ -34,6 +44,11 @@
       <div class="ui segment">
 				<h1>My match results</h1>
 				<table class="ui celled table">
+          <thead>
+            <th colspan="3">Match</th>
+            <th colspan="1">Result</th>
+            <th colspan="1">Points</th>
+          </thead>
 			    <tbody>
 						{{#each matches}}
 							<tr>
@@ -41,6 +56,11 @@
 								<td> vs. </td>
 								<td>{{this.awayTeam}}</td>
 								<td>{{this.homeGoals}} - {{this.awayGoals}}</td>
+                {{#ifCond this.pointsGiven 1}}
+                  <td>{{this.points}}</td>
+                {{else}}
+                  <td>N/A</td>
+                {{/ifCond}}
 							</tr>
 						{{/each}}
 			    </tbody>
@@ -49,7 +69,3 @@
     </div>
   </div>
 </div>
-
-
-</body>
-</html>

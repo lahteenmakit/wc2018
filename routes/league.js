@@ -154,7 +154,6 @@ router.get('/:id/user/:user_id', accessToLeague(), authenticationMiddleware(), (
                         res.json(err);
                       } else {
                         var matches = rows;
-                        //quizDone?
                         QuestionAnswer.getAnswersByUser(req.params.user_id, (err, rows) => {
                           if(err) {
                             res.json(err);
