@@ -24,8 +24,8 @@
 			<tbody>
 				{{#each usersInLeague}}
 					<tr>
-						<td class="collapsing">{{getRank @index}}</td>	
-						<td>{{this.username}}</td>
+						<td class="collapsing">{{getRank @index}}</td>
+						<td><a href="/league/{{this.league_id}}/user/{{this.user_id}}">{{this.username}}</a></td>
 						<td>{{this.points}}</td>
 					</tr>
 				{{/each}}
@@ -33,6 +33,3 @@
 		</table>
 	</div>
 </div>
-
-
-

@@ -8,6 +8,7 @@ const Queries = {
   getPoints: "SELECT points FROM users WHERE user_id=?;",
   getQuizDone: "SELECT quizDone FROM users WHERE user_id=?;",
   setQuizDone: "UPDATE users SET quizDone=1 WHERE user_id=?;",
+  resetPassword: "UPDATE users SET password=? WHERE user_id=?;",
 
   /**LEAGUES**/
   createLeague: "INSERT INTO leagues (name, password) VALUES (?, ?);",
@@ -31,36 +32,35 @@ const Queries = {
   userIsPartOfAnyLeague: "SELECT COUNT(user_id) FROM users_leagues WHERE user_id=?;",
 
   /**MATCHES**/
-  addUserPointsForMatch: "UPDATE matches SET points=points+? WHERE user_id=? AND matchNumber=?;",
-  getAllMatches: "SELECT * FROM matches;",
+  addUserPointsForMatch: "UPDATE matches SET points=points+?,pointsGiven=1 WHERE user_id=? AND matchNumber=?;",
+  getAllMatches: "SELECT * FROM matches_base;",
   getGroupStageMatches: "SELECT * FROM matches_base WHERE stage='group';",
-  setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=?,matchEnded=? WHERE user_id=? AND matchNumber=?;",
+  setMatchResultForUser: "UPDATE matches SET homeGoals=?,awayGoals=? WHERE user_id=? AND matchNumber=?;",
   setOfficialMatchResult: "UPDATE matches_base SET homeGoals=?,awayGoals=?,matchEnded=? WHERE matchNumber=?;",
   insertMatchesForUsers: `INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber)
                          SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber
                          FROM matches_base;`,
   getUserAnswersForMatches: "SELECT homeTeam, awayTeam, homeGoals, awayGoals FROM matches WHERE user_id=? AND stage='group';",
-  getNewOfficialResultsAndUserAnswers: `SELECT matches_base.matchNumber AS official_mn, matches_base.homeGoals AS official_hg, matches_base.awayGoals AS official_ag, 
-                                               matches.homeGoals AS user_hg, matches.awayGoals AS user_ag, matches.user_id AS user_id
+  getNewOfficialResultsAndUserAnswers: `SELECT matches_base.matchNumber AS official_mn, matches_base.homeGoals AS official_hg, matches_base.awayGoals AS official_ag,
+                                        matches.homeGoals AS user_hg, matches.awayGoals AS user_ag, matches.user_id AS user_id
                                         FROM matches_base
                                         INNER JOIN matches
                                         ON matches_base.matchNumber=matches.matchNumber
-                                        AND matches_base.matchEnded=1`,
-                                        
+                                        AND matches_base.matchEnded=1
+                                        AND matches.pointsGiven=0;`,
+
 
   /**TEAMS**/
-  getAllTeams: `SELECT DISTINCT matches.homeTeam AS team, teams.flagFileName
-                FROM matches
-                INNER JOIN teams
-                ON matches.homeTeam=teams.name
-                AND matches.user_id=1
-                ORDER BY matches.homeTeam ASC;`,
+  getAllTeams:  `SELECT DISTINCT matches_base.homeTeam AS team
+                FROM matches_base
+                WHERE stage='group'
+                ORDER BY matches_base.homeTeam ASC;`,
 
   /**PLAYERS**/
   getAllPlayers: "SELECT * FROM players;",
 
   /**QUESTIONS AND ANSWERS**/
-  addUserPointsForQuestion: "UPDATE questionsAndAnswers SET points=points+? WHERE user_id=? AND category=?;",
+  addUserPointsForQuestion: "UPDATE questionsAndAnswers SET points=points+?,pointsGiven=1 WHERE user_id=? AND category=?;",
   getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
   getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
   getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
@@ -68,22 +68,25 @@ const Queries = {
                                   FROM questionsAndAnswers_base
                                   INNER JOIN questionsAndAnswers
                                   ON questionsAndAnswers_base.category=questionsAndAnswers.category
-                                  AND questionsAndAnswers_base.category REGEXP 'standings*';`,
+                                  AND questionsAndAnswers_base.category REGEXP 'standings*'
+                                  AND questionsAndAnswers.pointsGiven=0;`,
   getNewOfficialScorersAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
                                         FROM questionsAndAnswers_base
                                         INNER JOIN questionsAndAnswers
                                         ON questionsAndAnswers_base.category=questionsAndAnswers.category
-                                        AND questionsAndAnswers_base.category REGEXP 'scorers*';`,
+                                        AND questionsAndAnswers_base.category REGEXP 'scorers*'
+                                        AND questionsAndAnswers.pointsGiven=0;`,
   getNewOfficialExtrasAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
                                         FROM questionsAndAnswers_base
                                         INNER JOIN questionsAndAnswers
                                         ON questionsAndAnswers_base.category=questionsAndAnswers.category
-                                        AND questionsAndAnswers_base.category REGEXP 'extras*';`,                                                                      
+                                        AND questionsAndAnswers_base.category REGEXP 'extras*'
+                                        AND questionsAndAnswers.pointsGiven=0;`,
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?;",
-  insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, questionType, answer) " +
-                           "SELECT ?, category, question, questionType, answer " +
+  insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, answer) " +
+                           "SELECT ?, category, question, answer " +
                            "FROM questionsAndAnswers_base;"
 }
 

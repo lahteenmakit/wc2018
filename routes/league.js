@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 const db = require('../dbconnection');
 
@@ -40,11 +41,11 @@ function authenticationMiddleware() {
 }
 
 
-router.get('/join', (req, res, next) => {
+router.get('/join', authenticationMiddleware(), (req, res, next) => {
   res.render('league-join');
 });
 
-router.post('/join', (req, res, next) => {
+router.post('/join', authenticationMiddleware(), (req, res, next) => {
   League.getLeagueByNameAndPassword(req.body.leagueName, req.body.leaguePassword, (err, rows) => {
     if(err) throw err;
     else {
@@ -65,7 +66,7 @@ router.post('/join', (req, res, next) => {
                 req.flash('error', 'Database error');
             }
             res.redirect('/league/join');
-          } 
+          }
           else {
             res.redirect('/league/' + league_id);
           }
@@ -75,11 +76,11 @@ router.post('/join', (req, res, next) => {
   });
 });
 
-router.get('/create', (req, res, next) => {
+router.get('/create', authenticationMiddleware(), (req, res, next) => {
   res.render('league-create');
 });
 
-router.post('/create', (req, res, next) => {
+router.post('/create', authenticationMiddleware(), (req, res, next) => {
   League.createLeague(req.body.leagueName, req.body.leaguePassword, (err, rows) => {
     if(err) throw err;
     else {
@@ -99,7 +100,7 @@ router.post('/create', (req, res, next) => {
   });
 });
 
-router.get('/my', (req, res, next) => {
+router.get('/my', authenticationMiddleware(), (req, res, next) => {
   League.getLeaguesByUser(req.user.user_id, (err, rows) => {
     if(err) throw err;
     else {
@@ -110,7 +111,7 @@ router.get('/my', (req, res, next) => {
   });
 });
 
-router.get('/:id', accessToLeague(), (req, res, next) => {
+router.get('/:id', accessToLeague(), authenticationMiddleware(), (req, res, next) => {
   League.getUsersInLeague(req.params.id, (err, rows) => {
     if(err) throw err;
     else {
@@ -122,41 +123,62 @@ router.get('/:id', accessToLeague(), (req, res, next) => {
 });
 
 router.get('/:id/user/:user_id', accessToLeague(), authenticationMiddleware(), (req, res, next) => {
-  User.getUsernameById(req.params.user_id, (err, rows) => {
-    if(err) {
-      res.json(err);
-    } else {
-      var username = rows[0].username;
-      User.getPoints(req.params.user_id, (err, rows) => {
-        if(err) {
-          res.json(err);
-        } else {
-          var points = rows[0].points;
-          Match.getUserAnswersForMatches(req.params.user_id, (err, rows) => {
+  var today = moment();
+  var tournamentStarts = moment('14/06/2018', 'DD/MM/YYYY');
+  if(today < tournamentStarts) {
+    req.flash('update','You will see other user answers once the tournament has started.');
+    res.redirect('/league/my');
+  }
+  else {
+    League.userIsPartOfLeague(req.params.user_id, req.params.id, (err, rows) => {
+      if(err) throw err;
+      else {
+        if(rows[0]['COUNT(user_id)'] == 0)
+          res.redirect('/');
+        else {
+          User.getUsernameById(req.params.user_id, (err, rows) => {
             if(err) {
               res.json(err);
             } else {
-              var matches = rows;
-              //quizDone? 
-              QuestionAnswer.getAnswersByUser(req.params.user_id, (err, rows) => {
-                if(err) {
-                  res.json(err);
-                } else {
-                  var answers = rows;
-                  res.render('user', {
-                    username: username,
-                    points: points,
-                    matches: matches,
-                    answers: answers
-                  });
-                }
-              });
+              if(rows.length == 0)
+                res.redirect('/');
+              else {
+                var username = rows[0].username;
+                User.getPoints(req.params.user_id, (err, rows) => {
+                  if(err) {
+                    res.json(err);
+                  } else {
+                    var points = rows[0].points;
+                    Match.getUserAnswersForMatches(req.params.user_id, (err, rows) => {
+                      if(err) {
+                        res.json(err);
+                      } else {
+                        var matches = rows;
+                        //quizDone?
+                        QuestionAnswer.getAnswersByUser(req.params.user_id, (err, rows) => {
+                          if(err) {
+                            res.json(err);
+                          } else {
+                            var answers = rows;
+                            res.render('user', {
+                              username: username,
+                              points: points,
+                              matches: matches,
+                              answers: answers
+                            });
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
             }
           });
         }
-      });
-    }
-  });
+      }
+    });
+  }
 });
 
 

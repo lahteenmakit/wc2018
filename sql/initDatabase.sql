@@ -3,14 +3,21 @@ CREATE TABLE users (
 	username VARCHAR(20) NOT NULL UNIQUE,
 	email VARCHAR(50) NOT NULL UNIQUE,
 	password BINARY(60) NOT NULL,
-	points int,
-	quizDone int,
+	points INT DEFAULT 0,
+	quizDone INT DEFAULT 0,
 	PRIMARY KEY(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(128) COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  `data` text COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB;
+
 CREATE TABLE leagues (
 	league_id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(20) UNIQUE NOT NULL, 
+	name VARCHAR(20) UNIQUE NOT NULL,
 	password VARCHAR(20) NOT NULL,
 	PRIMARY KEY(league_id)
 );
@@ -24,7 +31,6 @@ CREATE TABLE users_leagues (
 CREATE TABLE questionsAndAnswers_base (
 	category VARCHAR(40),
 	question VARCHAR(100),
-	questionType VARCHAR(40),
 	answer VARCHAR(20)
 );
 
@@ -43,12 +49,12 @@ CREATE TABLE matches_base (
 
 CREATE TABLE questionsAndAnswers (
 	id INT NOT NULL AUTO_INCREMENT,
-  	user_id INT NOT NULL,
+  user_id INT NOT NULL,
 	category VARCHAR(40),
 	question VARCHAR(100),
-	questionType VARCHAR(40),
 	answer VARCHAR(20),
 	points INT DEFAULT 0,
+	pointsGiven INT DEFAULT 0,
 	PRIMARY KEY(id)
 );
 
@@ -64,19 +70,16 @@ CREATE TABLE matches (
 	groupNumber VARCHAR(10),
 	homeGoals INT DEFAULT 0,
 	awayGoals INT DEFAULT 0,
-	matchEnded INT DEFAULT 0,
 	points INT DEFAULT 0,
+	pointsGiven INT DEFAULT 0,
 	PRIMARY KEY(id)
 );
 
 CREATE TABLE teams (
 	id INT NOT NULL AUTO_INCREMENT,
 	name varchar(25),
-	flagFileName varchar(30),
 	PRIMARY KEY(id)
 );
-
-/*INSERT INTO users admin*/
 
 INSERT INTO matches_base (matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber, homeGoals, awayGoals, matchEnded)
 VALUES
@@ -145,50 +148,15 @@ VALUES
 (63,'knockout','14/07/2018 17:00','Saint Petersburg Stadium','To be announced','To be announced','',0,0,0),
 (64,'knockout','15/07/2018 18:00','Luzhniki Stadium / Moscow','To be announced','To be announced','',0,0,0);
 
-INSERT INTO questionsAndAnswers_base (category, question, questionType, answer)
+INSERT INTO questionsAndAnswers_base (category, question, answer)
 VALUES
-('standings_champion', 'Champion', 'multipleChoice', ''),
-('standings_runnerUp', 'Runner-up', 'multipleChoice', ''),
-('standings_thirdPlace', '3rd place', 'multipleChoice', ''),
-('scorers_topScorer', 'Top Scorer', 'multipleChoice', ''),
-('scorers_goals', 'Goals', 'numberInput', ''),
-('extras_questions1', 'Extra Question 1', '', ''),
-('extras_questions2', 'Extra Question 2', '', ''),
-('extras_questions3', 'Extra Question 3', '', ''),
-('extras_questions4', 'Extra Question 4', '', ''),
-('extras_questions5', 'Extra Question 5', '', '');
-
-INSERT INTO teams (name, flagFileName)
-VALUES
-('Egypt','egypt.png'),
-('Russia','russia.png'),
-('Saudi Arabia','saudi arabia.png'),
-('Uruguay','uruguay.png'),
-('Iran','iran.png'),
-('Morocco','morocco.png'),
-('Portugal','portugal.png'),
-('Spain','spain.png'),
-('Australia','australia.png'),
-('Denmark','denmark.png'),
-('France','france.png'),
-('Peru','peru.png'),
-('Argentina','argentina.png'),
-('Croatia','croatia.png'),
-('Iceland','iceland.png'),
-('Nigeria','nigeria.png'),
-('Brazil','brazil.png'),
-('Costa Rica','costa rica.png'),
-('Serbia','serbia.png'),
-('Switzerland','switzerland.png'),
-('Germany','germany.png'),
-('Mexico','mexico.png'),
-('Korea Republic','korea republic.png'),
-('Sweden','sweden.png'),
-('Belgium','belgium.png'),
-('England','england.png'),
-('Panama','panama.png'),
-('Tunisia','tunisia.png'),
-('Colombia','colombia.png'),
-('Japan','japan.png'),
-('Poland','poland.png'),
-('Senegal','senegal.png');
+('standings_champion', 'Champion', ''),
+('standings_runnerUp', 'Runner-up', ''),
+('standings_thirdPlace', '3rd place', ''),
+('scorers_topScorer', 'Top Scorer', ''),
+('scorers_goals', 'Goals', ''),
+('extras_questions1', 'Extra Question 1', ''),
+('extras_questions2', 'Extra Question 2', ''),
+('extras_questions3', 'Extra Question 3', ''),
+('extras_questions4', 'Extra Question 4', ''),
+('extras_questions5', 'Extra Question 5', '');

@@ -12,7 +12,7 @@ router.get('/start', getQuizDone(), authenticationMiddleware(), (req, res, next)
   League.userIsPartOfAnyLeague(req.user.user_id, (err, rows) => {
     if(err) throw err;
     else {
-      var userIsPartOfLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;  
+      var userIsPartOfLeague = rows[0]['COUNT(user_id)'] > 0 ? true : false;
       res.render('quiz-start', {
         partOfLeague: userIsPartOfLeague
       });
@@ -59,6 +59,7 @@ router.get('/standings', getQuizDone(), authenticationMiddleware(), (req, res, n
     if (err) {
       res.json(err);
     } else {
+      console.log(rows);
       res.render('quiz-standings', {
         teams: rows
       });

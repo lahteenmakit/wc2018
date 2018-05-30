@@ -1,0 +1,30 @@
+{{> header}}
+
+<div class="ui container">
+	{{#if errors}}
+	{{#each errors}}
+		<div class="ui negative message">
+			<div class="header">
+				{{this.msg}}
+			</div>
+		</div>
+	{{/each}}
+	{{/if}}
+
+	<h1>Reset user password</h1>
+  <form method="POST" action="/admin/reset/user" class="ui form">
+    <div class="field">
+      <label>Reset password for which user?</label>
+      <input type="number" name="user_id" placeholder="User ID" required>
+    </div>
+    <div class="field">
+      <label>Submit new password</label>
+      <input type="password" name="password" placeholder="Password" required>
+    </div>
+    <div class="field">
+      <label>Confirm new password</label>
+      <input type="password" name="passwordMatch" placeholder="Confirm password" required>
+    </div>
+    <button type="submit" class="ui basic positive large button">Reset admin password</button>
+  </form>
+</div>

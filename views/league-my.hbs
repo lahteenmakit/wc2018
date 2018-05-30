@@ -1,6 +1,13 @@
 {{> header }}
 
 <div class="ui container">
+	{{#if messages.update}}
+		<div class="ui positive message">
+			<div class="header">
+			  {{messages.update}}
+			</div>
+		</div>
+	{{/if}}
 	<h1>My Leagues</h1>
 	<div class="ui list">
 	{{#each leagues}}

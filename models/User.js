@@ -25,6 +25,9 @@ const User = {
   },
   setQuizDone: (id, callback) => {
     return db.query(Queries.setQuizDone, [id], callback);
+  },
+  resetPassword: (id, password, callback) => {
+    return db.query(Queries.resetPassword, [password, id], callback);
   }
 };
 

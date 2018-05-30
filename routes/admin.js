@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const expressValidator = require('express-validator');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const flash = require('express-flash');
 
 const moment = require('moment');
 
@@ -30,9 +34,7 @@ router.get('/matches', userIsAdmin(), (req, res, next) => {
       res.json(err);
     } else {
       var matchesToShow = rows.filter((element) => {
-        var today = moment();
-        var matchDate = moment(element.date, 'DD/MM/YYYY hh:mm');
-        return element.matchEnded == 0 && today.diff(matchDate, 'hours') > 0;
+        return element.matchEnded == 0;
       });
       res.render('admin-matches', {
         matches: matchesToShow
@@ -91,7 +93,7 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
       }
     });
   }
-});  
+});
 
 router.get('/standings', userIsAdmin(), (req, res, next) => {
   Team.getAllTeams( (err, rows) => {
@@ -109,8 +111,7 @@ router.post('/standings', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    var category = i; 
-    console.log(category + " " + answers[i])
+    var category = i;
     QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) throw err;
     });
@@ -130,12 +131,12 @@ router.post('/standings', userIsAdmin(), (req, res, next) => {
           QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
               if(err) throw err;
           });
-        });  
-      }); 
+        });
+      });
     req.flash('update', 'Updated official standings');
     res.redirect('/admin');
-    } 
-  }); 
+    }
+  });
 });
 
 router.get('/scorers', userIsAdmin(), (req, res, next) => {
@@ -146,7 +147,7 @@ router.post('/scorers', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    var category = i; 
+    var category = i;
     QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {
           error += err;
@@ -167,14 +168,14 @@ router.post('/scorers', userIsAdmin(), (req, res, next) => {
           if(element.official_answer == element.user_answer && element.official_cat == 'scorers_topScorer') {
               points += pointSystem.playerCorrect;
               if(array[index+1].official_answer == array[index+1].user_answer)
-                points += pointSystem.goalsCorrect;                           
+                points += pointSystem.goalsCorrect;
           }
           User.addPoints(points, element.user_id, (err, rows) => {
             if(err) throw err;
             QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
               if(err) throw err;
             });
-          }); 
+          });
         });
       req.flash('update', 'Updated official top scorer');
       res.redirect('/admin');
@@ -199,7 +200,7 @@ router.post('/extras', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    var category = i; 
+    var category = i;
     QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {
           error += err;
@@ -217,20 +218,49 @@ router.post('/extras', userIsAdmin(), (req, res, next) => {
       else {
         rows.forEach(element => {
           var points = 0;
-          if(element.official_answer == element.user_answer) 
+          if(element.official_answer == element.user_answer)
             points += pointSystem.extraQuestionCorrect;
             User.addPoints(points, element.user_id, (err, rows) => {
               if(err) throw err;
               QuestionAnswer.addUserPointsForQuestion(points, element.user_id, element.official_cat, (err, rows) => {
                 if(err) throw err;
               });
-          }); 
+          });
         });
         req.flash('update', 'Updated official extra question answers');
         res.redirect('/admin');
       }
     });
-    
+
+  }
+});
+
+router.get('/reset/user', userIsAdmin(), (req, res, next) => {
+  res.render('admin-resetuser');
+});
+
+router.post('/reset/user', userIsAdmin(), (req, res, next) => {
+  req.checkBody('password', 'Password must be between 2-100 characters long.').len(2, 100);
+  req.checkBody('passwordMatch', 'Passwords do not match, please try again.').equals(req.body.password);
+
+  const errors = req.validationErrors();
+
+  if(errors) {
+    res.render('admin-resetuser', {
+      title: 'Registration Error',
+      errors: errors
+    });
+  }
+  else {
+    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+      User.resetPassword(req.body.user_id, hash, (err, rows) => {
+        if(err) throw err;
+        else {
+          req.flash('update', 'User ' + req.body.user_id + ' password was changed successfully.')
+          res.redirect('/admin');
+        }
+      })
+    });
   }
 });
 
