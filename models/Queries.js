@@ -84,8 +84,8 @@ const Queries = {
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?;",
-  insertQuestionsForUsers: `INSERT INTO questionsAndAnswers (user_id, category, question, answer)
-                            SELECT ?, category, question, answer
+  insertQuestionsForUsers: `INSERT INTO questionsAndAnswers (user_id, category, question)
+                            SELECT ?, category, question
                             FROM questionsAndAnswers_base;`
 }
 
