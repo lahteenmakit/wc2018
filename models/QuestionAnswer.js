@@ -20,8 +20,8 @@ const QuestionAnswer = {
   getNewOfficialStandingsAndUserAnswers: (callback) => {
     return db.query(Queries.getNewOfficialStandingsAndUserAnswers, callback)
   },
-  getNewOfficialScorersAndUserAnswers: (callback) => {
-    return db.query(Queries.getNewOfficialScorersAndUserAnswers, callback)
+  getUserAnswersForScorers: (callback) => {
+    return db.query(Queries.getUserAnswersForScorers, callback)
   },
   getNewOfficialExtrasAndUserAnswers: (callback) => {
     return db.query(Queries.getNewOfficialExtrasAndUserAnswers, callback)

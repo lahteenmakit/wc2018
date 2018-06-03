@@ -1,13 +1,13 @@
 {{> header}}
 
 <div id="matchesTableDiv" class="ui container">
-  
+
   <h1>Group stage match results</h1>
   <p>Guess the result of each match played in the group stage. Enter the number of goals scored by both teams.</p>
   <p>Points: <br>
-    Correct number of goals for each team: <b>4 points</b><br>
-    Correct number of goals for only one team: <b>1 point</b><br>
-    Correct outcome (1-X-2): <b>1 point</b><br>
+    Correct outcome (1-X-2): <b>2 points</b><br>
+    Correct number of goals for one team: <b>1 point</b><br><br>
+    Max points for one match: <b>5 points</b> (2 points for outcome, 1 point for each team's goals, 1 bonus point for a perfect guess)<br><br>
   </p>
     <form method="POST" action="/quiz/matches">
       <table class="ui fixed table">
@@ -45,5 +45,3 @@
       <br><br><br><br>
     </form>
 </div>
-
-

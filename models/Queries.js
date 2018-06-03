@@ -62,20 +62,19 @@ const Queries = {
   /**QUESTIONS AND ANSWERS**/
   addUserPointsForQuestion: "UPDATE questionsAndAnswers SET points=points+?,pointsGiven=1 WHERE user_id=? AND category=?;",
   getAnswersByUser: "SELECT * FROM questionsAndAnswers WHERE user_id=?;",
-  getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers;",
-  getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers WHERE category REGEXP 'extras*';",
+  getAllQuestions: "SELECT DISTINCT question FROM questionsAndAnswers_base;",
+  getExtraQuestions: "SELECT DISTINCT question,category FROM questionsAndAnswers_base WHERE category REGEXP 'extras*';",
   getNewOfficialStandingsAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
                                   FROM questionsAndAnswers_base
                                   INNER JOIN questionsAndAnswers
                                   ON questionsAndAnswers_base.category=questionsAndAnswers.category
                                   AND questionsAndAnswers_base.category REGEXP 'standings*'
                                   AND questionsAndAnswers.pointsGiven=0;`,
-  getNewOfficialScorersAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
-                                        FROM questionsAndAnswers_base
-                                        INNER JOIN questionsAndAnswers
-                                        ON questionsAndAnswers_base.category=questionsAndAnswers.category
-                                        AND questionsAndAnswers_base.category REGEXP 'scorers*'
-                                        AND questionsAndAnswers.pointsGiven=0;`,
+  getUserAnswersForScorers: `SELECT questionsAndAnswers.user_id,questionsAndAnswers.answer,users.username
+                            FROM questionsAndAnswers
+                            INNER JOIN users
+                            ON questionsAndAnswers.user_id=users.user_id
+                            AND questionsAndAnswers.category='scorers_topScorer';`,
   getNewOfficialExtrasAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
                                         FROM questionsAndAnswers_base
                                         INNER JOIN questionsAndAnswers
@@ -85,9 +84,9 @@ const Queries = {
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
   userHasAnsweredQuestions: "SELECT COUNT(1) FROM questionsAndAnswers WHERE user_id=?;",
-  insertQuestionsForUsers: "INSERT INTO questionsAndAnswers (user_id, category, question, answer) " +
-                           "SELECT ?, category, question, answer " +
-                           "FROM questionsAndAnswers_base;"
+  insertQuestionsForUsers: `INSERT INTO questionsAndAnswers (user_id, category, question, answer)
+                            SELECT ?, category, question, answer
+                            FROM questionsAndAnswers_base;`
 }
 
 module.exports = Queries;

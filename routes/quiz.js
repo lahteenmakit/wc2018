@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 
 const User = require('../models/User.js');
 const League = require('../models/League.js');
@@ -8,7 +9,7 @@ const Team = require('../models/Team.js');
 const Player = require('../models/Player.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
 
-router.get('/start', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+router.get('/start', getQuizDone(), authenticationMiddleware(), answerTimeExpired(), (req, res, next) => {
   League.userIsPartOfAnyLeague(req.user.user_id, (err, rows) => {
     if(err) throw err;
     else {
@@ -20,7 +21,7 @@ router.get('/start', getQuizDone(), authenticationMiddleware(), (req, res, next)
   });
 });
 
-router.get('/matches', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+router.get('/matches', getQuizDone(), authenticationMiddleware(), answerTimeExpired(), (req, res, next) => {
   Match.getGroupStageMatches((err, rows) => {
     if (err) {
       res.json(err);
@@ -54,7 +55,7 @@ router.post('/matches', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/standings');
 });
 
-router.get('/standings', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+router.get('/standings', getQuizDone(), authenticationMiddleware(), answerTimeExpired(), (req, res, next) => {
   Team.getAllTeams( (err, rows) => {
     if (err) {
       res.json(err);
@@ -83,7 +84,7 @@ router.post('/standings', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/scorers');
 });
 
-router.get('/scorers', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+router.get('/scorers', getQuizDone(), authenticationMiddleware(), answerTimeExpired(), (req, res, next) => {
   res.render('quiz-scorers');
 });
 
@@ -103,7 +104,7 @@ router.post('/scorers', authenticationMiddleware(), (req, res, next) => {
   error != '' ? res.json(error) : res.redirect('/quiz/extras');
 });
 
-router.get('/extras', getQuizDone(), authenticationMiddleware(), (req, res, next) => {
+router.get('/extras', getQuizDone(), authenticationMiddleware(), answerTimeExpired(), (req, res, next) => {
   QuestionAnswer.getExtraQuestions((err, rows) => {
     if (err) {
       res.json(err);
@@ -119,8 +120,9 @@ router.post('/extras', authenticationMiddleware(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    var category = i;
-    QuestionAnswer.setAnswerByUser(req.user.user_id, category, answers[i], (err, rows) => {
+    var category = i.split('-')[0];
+    var answer = i.split('-')[1] == 'over' ? 'over' : 'under';
+    QuestionAnswer.setAnswerByUser(req.user.user_id, category, answer, (err, rows) => {
       if (err) {
           error += err;
       } else {
@@ -158,6 +160,20 @@ function getQuizDone() {
       });
     } else {
       res.redirect('/login');
+    }
+  }
+}
+
+function answerTimeExpired() {
+  return (req, res, next) => {
+    var today = moment();
+    var quizExpires = moment('14/06/2018', 'DD/MM/YYYY');
+    if(today >= quizExpires) {
+      req.flash('error','The tournament has started and new answers are no longer accepted. Please try again in 4 years :)');
+      res.redirect('/');
+    }
+    else {
+      return next();
     }
   }
 }

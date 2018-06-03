@@ -126,7 +126,7 @@ router.get('/:id/user/:user_id', accessToLeague(), authenticationMiddleware(), (
   var today = moment();
   var tournamentStarts = moment('14/06/2018', 'DD/MM/YYYY');
   if(today < tournamentStarts) {
-    req.flash('update','You will see other user answers once the tournament has started.');
+    req.flash('warning','You will see other user answers once the tournament has started.');
     res.redirect('/league/my');
   }
   else {

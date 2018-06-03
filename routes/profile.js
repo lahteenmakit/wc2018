@@ -22,17 +22,23 @@ router.get('/', authenticationMiddleware(), (req, res, next) => {
               res.json(err);
             } else {
               var matches = rows;
-              //quizDone? 
-              QuestionAnswer.getAnswersByUser(req.user.user_id, (err, rows) => {
-                if(err) {
-                  res.json(err);
-                } else {
-                  var answers = rows;
-                  res.render('profile', {
-                    username: username,
-                    points: points,
-                    matches: matches,
-                    answers: answers
+              User.getQuizDone(req.user.user_id, (err, rows) => {
+                if(err) throw err;
+                else {
+                  var quizDone = rows[0].quizDone;
+                  QuestionAnswer.getAnswersByUser(req.user.user_id, (err, rows) => {
+                    if(err) {
+                      res.json(err);
+                    } else {
+                      var answers = rows;
+                      res.render('profile', {
+                        username: username,
+                        points: points,
+                        matches: matches,
+                        answers: answers,
+                        quizDone: quizDone
+                      });
+                    }
                   });
                 }
               });

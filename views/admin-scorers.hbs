@@ -3,14 +3,15 @@
 <div class="ui container">
   <h1>Official top scorer</h1>
   <form method="POST" action="/admin/scorers" class="ui form">
-    <div class="field">
-      <label>Top scorer</label>
-      <input name="scorers_topScorer" type="text" placeholder="Player name" required>
+    <div class="grouped fields">
+    {{#each scorers}}
+      <div class="field">
+        <label>{{this.username}} - Answer: <i>{{this.answer}}</i></label>
+        <input type="number" name="{{this.user_id}}" placeholder="Points for goals">
+      </div>
+      <br>
+    {{/each}}
     </div>
-    <div class="field">
-      <label>Goals</label>
-      <input name="scorers_goals" type="number" min=0 placeholder="Number of goals" required>
-    </div>
-    <button type="submit" class="ui basic positive huge button">Submit official answers</button>
+    <button type="submit" class="ui basic positive huge button">Submit points for goals</button>
   </form>
 </div>

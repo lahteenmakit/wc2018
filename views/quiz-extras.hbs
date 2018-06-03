@@ -3,14 +3,28 @@
 <div class="ui container">
   <h1>Extra Questions</h1>
   <p>Guess the answers to the following questions.</p>
-  <p>Points: <b> One point for each correct answer </b></p>
+  <p>Points: <i>One point for each correct answer</i></p><br>
     <form method="POST" action="/quiz/extras" class="ui form">
       {{#each questions}}
-      <div class="field">
-        <label>{{this.question}}</label>
-        <input type="text" name={{this.category}} placeholder="Answer" required>
+        <div class="grouped fields">
+          <label style="font-size:15px;">{{stringFirstPart this.question}}</label>
+          <div>{{stringSecondPart this.question}}</div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="{{this.category}}-over">
+              <label>Over</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="{{this.category}}-under">
+              <label>Under</label>
+            </div>
+          </div>
       </div>
+      <br><br>
       {{/each}}
       <button type="submit" class="ui basic positive huge button">Submit your answers</button>
+      <br><br><br><br>
     </form>
 </div>

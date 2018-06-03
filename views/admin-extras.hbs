@@ -2,14 +2,28 @@
 
 <div class="ui container">
 	<h1>Official answers to extras questions</h1>
-    <form method="POST" action="/admin/extras" class="ui form">
-      {{#each questions}}
-      <div class="field">
-        <label>{{this.question}}</label>
-        <input type="text" name={{this.category}} placeholder="Answer" required>
-      </div>
-      {{/each}}
-      <button type="submit" class="ui basic positive huge button">Submit your answers</button>
-    </form>
+	<form method="POST" action="/admin/extras" class="ui form">
+		{{#each questions}}
+			<div class="grouped fields">
+				<label style="font-size:15px;">{{stringFirstPart this.question}}</label>
+				<div>{{stringSecondPart this.question}}</div>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="{{this.category}}-over">
+						<label>Over</label>
+					</div>
+				</div>
+				<div class="field">
+					<div class="ui radio checkbox">
+						<input type="radio" name="{{this.category}}-under">
+						<label>Under</label>
+					</div>
+				</div>
+		</div>
+		<br><br>
+		{{/each}}
+		<button type="submit" class="ui basic positive huge button">Submit official answers</button>
+		<br><br><br><br>
+	</form>
 
 </div>

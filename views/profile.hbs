@@ -16,6 +16,7 @@
 				  </div>
 				</div>
 			</div>
+      {{#ifCond this.quizDone 1}}
 			<div class="ui segment">
 				<h1>My answers</h1>
 					<table class="ui celled table">
@@ -39,7 +40,11 @@
 						</tbody>
 					</table>
 			</div>
+      {{else}}
+      <p>You have not submitted quiz answers yet. Do it <a href="/quiz/start">here</a>.</p>
+      {{/ifCond}}
     </div>
+    {{#ifCond this.quizDone 1}}
     <div class="column">
       <div class="ui segment">
 				<h1>My match results</h1>
@@ -67,5 +72,6 @@
 			  </table>
 			</div>
     </div>
+    {{/ifCond}}
   </div>
 </div>

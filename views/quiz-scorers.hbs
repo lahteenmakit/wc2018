@@ -2,21 +2,15 @@
 
 <div class="ui container">
   <h1>Top scorers of the Fifa World cup 2018</h1>
-  <p>Guess the top scorer of the tournament and the number of goals scored by him.</p>
+  <p>Guess the top scorer of the tournament.</p>
   <p>Points: <br>
-    Both player AND goals correct <b>10 points</b><br>
-    Player correct but goals incorrect: <b>3 points</b><br>
+    <i>You will receive one point for each goal your player scores. Goals in a penalty shootout do not count.</i>
   </p>
   <form method="POST" action="/quiz/scorers" class="ui form">
     <div class="field">
       <label>Top scorer</label>
       <input name="scorers_topScorer" type="text" placeholder="Player name" required>
     </div>
-    <div class="field">
-      <label>Goals</label>
-      <input name="scorers_goals" type="number" min=0 placeholder="Number of goals" required>
-    </div>
-    <button type="submit" class="ui basic positive huge button">Submit your answers</button>
+    <button type="submit" class="ui basic positive huge button">Submit your answer</button>
   </form>
 </div>
-

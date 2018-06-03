@@ -49,6 +49,15 @@ hbs.registerHelper('tournamentStarted', (options) => {
 		return options.inverse(this);
 });
 
+hbs.registerHelper('stringFirstPart', (value) => {
+  return value.split(': ')[0];
+});
+
+hbs.registerHelper('stringSecondPart', (value) => {
+  return value.split(': ')[1];
+});
+
+
 hbs.registerHelper('tournamentNotStarted', (options) => {
 	var startDate = moment('14/06/2017', 'DD/MM/YYYY');
 	var today = moment();

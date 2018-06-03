@@ -1,6 +1,7 @@
 const pointSystem = {
-	'goalsCorrectForOneTeam': 2,
-	'outcomeCorrect': 1,
+	'goalsCorrectForOneTeam': 1,
+	'outcomeCorrect': 2,
+	'matchBonusPoint': 1,
 	'teamAndPlaceCorrect': 5,
 	'onlyTeamCorrect': 2,
 	'playerCorrect': 3,

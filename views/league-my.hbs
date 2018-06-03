@@ -8,6 +8,13 @@
 			</div>
 		</div>
 	{{/if}}
+	{{#if messages.warning}}
+		<div class="ui warning message">
+			<div class="header">
+			  {{messages.warning}}
+			</div>
+		</div>
+	{{/if}}
 	<h1>My Leagues</h1>
 	<div class="ui list">
 	{{#each leagues}}
