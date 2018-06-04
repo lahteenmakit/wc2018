@@ -200,9 +200,8 @@ router.post('/extras', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
-    var category = i.split('-')[0];
-    var answer = i.split('-')[1] == 'over' ? 'over' : 'under';
-    QuestionAnswer.setOfficialAnswers(answer, category, (err, rows) => {
+    var category = i;
+    QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {
           error += err;
       } else {

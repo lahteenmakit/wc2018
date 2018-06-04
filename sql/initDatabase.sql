@@ -30,7 +30,7 @@ CREATE TABLE users_leagues (
 
 CREATE TABLE questionsAndAnswers_base (
 	category VARCHAR(40),
-	question VARCHAR(100),
+	question VARCHAR(300),
 	answer VARCHAR(20)
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE questionsAndAnswers (
 	id INT NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
 	category VARCHAR(40),
-	question VARCHAR(100),
+	question VARCHAR(300),
 	answer VARCHAR(20),
 	points INT DEFAULT 0,
 	pointsGiven INT DEFAULT 0,
@@ -154,7 +154,6 @@ VALUES
 ('standings_runnerUp', 'Runner-up', ''),
 ('standings_thirdPlace', '3rd place', ''),
 ('scorers_topScorer', 'Top Scorer', ''),
-('scorers_goals', 'Goals', ''),
 ('extras_questions1', 'Total goals scored: Over or under 150,5 goals in Fifa world cup 2018 (including group and knockout stage, excluding penalty shootouts)?', ''),
 ('extras_questions2', 'Goals scored in a single match: Over or under 7,5 goals in at least one match (including group and knockout stage, excluding penalty shootouts)?', ''),
 ('extras_questions3', 'Own goals: Over or under 3,5 own goals (including group and knockout stage)?', ''),
@@ -163,5 +162,5 @@ VALUES
 ('extras_questions6', 'Yellow cards: Over or under 200,5 yellow cards (including group and knockout stage)?', ''),
 ('extras_questions7', 'Red cards: Over or under 12,5 red cards (including group and knockout stage)? ', ''),
 ('extras_questions8', 'Penalty kicks: Over or under 14,5 penalty kicks (including group and knockout stage, excluding penalty shootouts)?', ''),
-('extras_questions9', 'Penalty kick success rate: Over or under 80,5 % of penalty kicks are successful (including group and knockout stage, excluding penalty shootouts)? The goals has to be scored directly from the spot kick to be counted. For example, goals after rebounds do not count. ', ''),
-('extras_questions10', 'Penalty shootouts: In the knockout stage, will over or under 2,5 matches be decided in a penalty shooutout?', ''),
+('extras_questions9', 'Penalty kick success rate: Over or under 80,5 % of penalty kicks are successful (including group and knockout stage, excluding penalty shootouts)? The goals have to be scored directly from the spot kick to be counted. For example, goals after rebounds do not count. ', ''),
+('extras_questions10', 'Penalty shootouts: In the knockout stage, will over or under 2,5 matches be decided in a penalty shooutout?', '');
