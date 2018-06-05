@@ -40,7 +40,7 @@ const Queries = {
   insertMatchesForUsers: `INSERT INTO matches (user_id, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber)
                          SELECT ?, matchNumber, stage, date, location, homeTeam, awayTeam, groupNumber
                          FROM matches_base;`,
-  getUserAnswersForMatches: "SELECT homeTeam, awayTeam, homeGoals, awayGoals, points, pointsGiven FROM matches WHERE user_id=? AND stage='group';",
+  getUserAnswersForMatches: "SELECT date, homeTeam, awayTeam, homeGoals, awayGoals, points, pointsGiven FROM matches WHERE user_id=? AND stage='group';",
   getNewOfficialResultsAndUserAnswers: `SELECT matches_base.matchNumber AS official_mn, matches_base.homeGoals AS official_hg, matches_base.awayGoals AS official_ag,
                                         matches.homeGoals AS user_hg, matches.awayGoals AS user_ag, matches.user_id AS user_id
                                         FROM matches_base

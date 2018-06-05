@@ -57,6 +57,10 @@ hbs.registerHelper('stringSecondPart', (value) => {
   return value.split(': ')[1];
 });
 
+hbs.registerHelper('splitDateGetTime', (value) => {
+  return value.split(' ')[1];
+});
+
 
 hbs.registerHelper('tournamentNotStarted', (options) => {
 	var startDate = moment('14/06/2017', 'DD/MM/YYYY');

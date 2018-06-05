@@ -13,9 +13,28 @@ const User = require('../models/User.js');
 const Match = require('../models/Match.js');
 const QuestionAnswer = require('../models/QuestionAnswer.js');
 
-router.get('/', (req, res, next) => {
+/*router.get('/', (req, res, next) => {
   req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
   res.render('home', {title: 'Home'});
+});*/
+
+router.get('/', (req, res, next) => {
+  req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
+  Match.getUserAnswersForMatches(req.user.user_id, (err, rows) => {
+    if(err) {
+      res.json(err);
+    } else {
+      var today = moment('16/06/2018', 'DD/MM/YYYY').format('DD/MM/YYYY');
+      var matchesToday = rows.filter(element => {
+        return element.date.split(' ')[0] == today;
+      });
+      console.log(matchesToday)
+      res.render('home2', {
+        title: 'Home',
+        matches: matchesToday
+      });
+    }
+  });
 });
 
 router.get('/register', (req, res, next) => {

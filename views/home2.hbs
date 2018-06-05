@@ -1,0 +1,47 @@
+{{> header }}
+
+
+  <div class="ui container">
+  	{{#if messages.error}}
+	  <div class="ui negative message">
+	    <div class="header">
+	      {{messages.error}}
+	    </div>
+	  </div>
+	{{/if}}
+  	<h1>Welcome to WC2018 app! Tournament is underway.</h1>
+    <h2>Matches today</h2>
+
+    <table class="ui fixed table">
+      <thead>
+        <th colspan="1">Starts</th>
+        <th colspan="1">Home team</th>
+        <th colspan="1">Away team</th>
+        <th colspan="1">My prediction</th>
+      </thead>
+      <tbody>
+        {{#each matches}}
+        <tr>
+          <td><i>@ {{splitDateGetTime this.date}}</i></td>
+          <td>
+            <img src="/public/images/flags/{{parseImgFileName this.homeTeam}}" height="20" width="40"><br>
+            {{this.homeTeam}}
+          </td>
+          <td>
+            <img src="/public/images/flags/{{parseImgFileName this.awayTeam}}" height="20" width="40"><br>
+            {{this.awayTeam}}
+          </td>
+          <td style="font-size:15px;">{{this.homeGoals}} - {{this.awayGoals}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+
+
+
+  </div>
+
+
+  </body>
+</html>
