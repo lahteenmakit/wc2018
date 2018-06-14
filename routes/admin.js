@@ -48,6 +48,8 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
   var success = '', error = '';
   var results = req.body;
   for(var i in results) {
+    if(results[i] == '')
+      continue;
     if(i.includes('homeGoals')) {
       var match = {};
       match['matchNumber'] = i.split('-')[0];
