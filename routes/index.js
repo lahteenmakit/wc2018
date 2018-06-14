@@ -19,22 +19,29 @@ const QuestionAnswer = require('../models/QuestionAnswer.js');
 });*/
 
 router.get('/', (req, res, next) => {
-  req.isAuthenticated() ? console.log(req.user) : console.log('User not Authenticated');
-  Match.getUserAnswersForMatches(req.user.user_id, (err, rows) => {
-    if(err) {
-      res.json(err);
-    } else {
-      var today = moment('16/06/2018', 'DD/MM/YYYY').format('DD/MM/YYYY');
-      var matchesToday = rows.filter(element => {
-        return element.date.split(' ')[0] == today;
-      });
-      console.log(matchesToday)
-      res.render('home2', {
-        title: 'Home',
-        matches: matchesToday
-      });
-    }
-  });
+  if(req.isAuthenticated()) {
+    Match.getUserAnswersForMatches(req.user.user_id, (err, rows) => {
+      if(err) {
+        res.json(err);
+      } else {
+        var today = moment().format('DD/MM/YYYY');
+        var matchesToday = rows.filter(element => {
+          return element.date.split(' ')[0] == today;
+        });
+        console.log(matchesToday)
+        res.render('home2', {
+          title: 'Home',
+          matches: matchesToday
+        });
+      }
+    });
+  }
+  else {
+    res.render('home3', {
+      title: 'Home'
+    });
+  }
+
 });
 
 router.get('/register', (req, res, next) => {

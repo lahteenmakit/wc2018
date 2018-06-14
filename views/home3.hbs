@@ -1,0 +1,16 @@
+{{> header }}
+
+
+  <div class="ui container">
+  	{{#if messages.error}}
+	  <div class="ui negative message">
+	    <div class="header">
+	      {{messages.error}}
+	    </div>
+	  </div>
+	{{/if}}
+  	<h1>Welcome to WC2018 app! Tournament is underway.</h1>
+    <h2>Please <a href="/login">login </a> to see more content.</h2>
+  </div>
+  </body>
+</html>
