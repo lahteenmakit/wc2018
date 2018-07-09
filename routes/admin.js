@@ -48,8 +48,6 @@ router.post('/matches', userIsAdmin(), (req, res, next) => {
   var success = '', error = '';
   var results = req.body;
   for(var i in results) {
-    if(results[i] == '')
-      continue;
     if(i.includes('homeGoals')) {
       var match = {};
       match['matchNumber'] = i.split('-')[0];
@@ -170,11 +168,9 @@ router.get('/scorers', userIsAdmin(), (req, res, next) => {
 router.post('/scorers', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
-
   var users = Object.keys(answers);
   users.forEach(element => {
     var points = parseInt(answers[element]);
-    console.log(element + " " + points);
     User.addPoints(points, element, (err, rows) => {
       if(err) throw err;
       QuestionAnswer.addUserPointsForQuestion(points, element, 'scorers_topScorer', (err, rows) => {
@@ -202,6 +198,8 @@ router.post('/extras', userIsAdmin(), (req, res, next) => {
   var answers = req.body;
   var success = '', error = '';
   for(var i in answers) {
+    if(answers[i] == '')
+      continue;
     var category = i;
     QuestionAnswer.setOfficialAnswers(answers[i], category, (err, rows) => {
       if (err) {

@@ -76,10 +76,11 @@ const Queries = {
                             ON questionsAndAnswers.user_id=users.user_id
                             AND questionsAndAnswers.category='scorers_topScorer';`,
   getNewOfficialExtrasAndUserAnswers: `SELECT questionsAndAnswers_base.category AS official_cat, questionsAndAnswers_base.answer AS official_answer, questionsAndAnswers.answer AS user_answer, questionsAndAnswers.user_id
-                                        FROM questionsAndAnswers_base
-                                        INNER JOIN questionsAndAnswers
+                                        FROM questionsAndAnswers
+                                        INNER JOIN questionsAndAnswers_base
                                         ON questionsAndAnswers_base.category=questionsAndAnswers.category
                                         AND questionsAndAnswers_base.category REGEXP 'extras*'
+                                        AND (questionsAndAnswers_base.answer = 'over' OR questionsAndAnswers_base.answer = 'under')
                                         AND questionsAndAnswers.pointsGiven=0;`,
   setAnswerByUser: "UPDATE questionsAndAnswers SET answer=? WHERE category=? AND user_id=?;",
   setOfficialAnswers: "UPDATE questionsAndAnswers_base SET answer=? WHERE category=?;",
